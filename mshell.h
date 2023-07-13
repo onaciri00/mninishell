@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/10 11:10:06 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/12 08:27:26 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ typedef struct s_lexer
 }	t_lexer;
 
 t_lexer *ft_start(char **env, char *str);
-int	check_err(char *str);
-int	syt_val(char *str);
+int	    check_err(char *str);
+int	    syt_val(char *str);
 t_file  *lst_file(t_file *fil);
-int len_2d(char **str);
+int     len_2d(char **str);
 t_lexer *creat_cmd(int size);
-t_file *new_file(t_file  **file);
-
+t_file  *new_file(t_file  **file);
+void    deqou_cmd(char *str, int sqo, int dqo, int i);
 #endif

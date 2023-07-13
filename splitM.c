@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/11 08:21:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/13 07:32:52 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_type(int id, t_file **file)
 		(*file)->type = 3;
 }
 
-int	mod_file(char *str, t_file **file, int id)
+int	mod_file(char *str, t_file **file, int id, int z)
 {
 	int		i;
 	int		j;
@@ -33,15 +33,21 @@ int	mod_file(char *str, t_file **file, int id)
 	i = 0;
 	j = 0;
 	while (str[++i] && !syt_val(str + i))
-		while (str[i] && str[i] == ' ')
+	{
+		if (str[i] != ' ')
+			z++;
+		while (str[i] && str[i] == ' ' && !z)
 		{	
 			j++;
 			i++;
 			if (str[i + 1] && str[i + 1] != ' ')
 				break;
 		}
-		if (syt_val(str + j))
-			j++;
+		if (z && str[i] == ' ')
+			break;
+	}
+	if (syt_val(str + j))
+		j++;
 	lst = new_file(file);
 	if (id == 2)
 		lst->limeter = ft_substr((const char *)str, j, i - j);
@@ -51,6 +57,22 @@ int	mod_file(char *str, t_file **file, int id)
 	return (1);
 }
 
+void clean_cmd(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i++])
+	{
+		if (syt_val(str + i))
+		{
+			str[i] = ' ';
+			while (str[i++] && str[i] != ' ')
+				if (str[i])
+					str[i] = ' ';
+		}
+	}
+}
 void	check_arg(char *str, t_lexer *cmd)
 {
 	int	i;
@@ -59,20 +81,15 @@ void	check_arg(char *str, t_lexer *cmd)
 	while (str[++i])
 	{
 		if (syt_val(str + i) == 2)  
-			i += mod_file(str +(i + 2), &cmd->file, 2);
+			i += mod_file(str +(i + 1), &cmd->file, 2, 0);
 		else if (syt_val(str + i) == 3)
-			i += mod_file(str +(i + 2), &cmd->file, 3);
+			i += mod_file(str +(i + 1), &cmd->file, 3, 0);
 		else if (syt_val(str +i) == 4)
-			mod_file(str + i, &cmd->file, 1);
+			mod_file(str + i, &cmd->file, 1, 0);
 		else if (syt_val(str + i) == 5)
-			mod_file(str + i , &cmd->file, 0);
+			mod_file(str + i , &cmd->file, 0, 0);
 	}
-	i = -1;
-	while (str[++i])
-	{
-		if (syt_val(str+ i) && syt_val(str + i) != 6)
-			str[i] = ' ';
-	}
+	clean_cmd(str);
 	cmd->cmd = str;
 }
 
@@ -87,6 +104,7 @@ t_lexer *ft_start(char **env, char *str)
 	i = 0;
 	if (str && check_err(str))
 		return (NULL);
+	deqou_cmd(str, 0, 0, -1);
 	raw = ft_split(str, '|');
 	size = len_2d(raw);
 	cmd = creat_cmd(size);

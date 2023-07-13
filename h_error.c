@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 06:19:08 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/11 08:26:38 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/11 09:23:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,15 @@ int	syt_val(char *str)
 	return (0);
 }
 
-int	err_qou(char *str)
+int	check_qou(char *str)
 {
 	int	i;
-	int	sqo;
 	int	dqo;
+	int	sqo;
 
 	i = -1;
-	sqo = 0;
 	dqo = 0;
-	if (syt_val(str) == 1)
-		return (printf("syntax error: unexpected end of file\n"),1);
+	sqo = 0;
 	while (str[++i])
 	{
 		if (str[i] == '"' && !sqo)
@@ -49,9 +47,21 @@ int	err_qou(char *str)
 		if (sqo == 2)
 			sqo = 0;
 	}
-	if (sqo == 1 || dqo == 1)
+	if (dqo == 1 || sqo == 1)
+		return (-1);
+	return (i);
+}
+
+int	err_qou(char *str)
+{
+	int	i;
+
+	i = check_qou(str);
+	if (syt_val(str) == 1)
+		return (printf("syntax error: pipe at the start\n"),1);
+	else if (i == -1)
 		return (printf("syntax error: unclosed Quote\n"), 1);
-	if (str[i - 1] =='|' || str[i - 1] == '>' || str[i - 1] == '<')
+	else if (syt_val(str + (i - 1)))
 		return (printf("syntax error: unexpected end of file\n"),1);
 	return (0);
 }
