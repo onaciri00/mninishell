@@ -40,39 +40,12 @@ remove quotes and get cmd and arguments
 if more come just keep skeping tell you find letter if ended thand put \0 in the last time you find it
 
 """d""hfd""hfhd""gfhj"""hdf"h"
-tmp = 0
-i = 3
+"" handklle
+
+herdoc == "limter"-> no expand for $limter and inside it
 
 
-	// int	tmp;
-	// int	i;
-	
-	// i = 0;
-	// tmp = 0;
-	// while (str[i])
-	// {
-	// 	if (str[i] == 127)
-	// 	{
-	// 		tmp = i;
-	// 		printf("tmp = %d\n", tmp);
-	// 		while (str[i] && str[i] == 127)
-	// 			i++;
-	// 		printf("  i = %d**\n", i);
-	// 		while (str[i] && str[i] != 127)
-	// 		{
-	// 			str[tmp] = str[i];
-	// 			printf("******tmp str = %c\n", str[tmp]);
-	// 			i++;
-	// 			tmp++;
-	// 		}
-	// 		if (str[i] == 127 && i)
-	// 		{
-	// 				i--;
-	// 			str[tmp] = 127;
-	// 		}
-	// 	}
-	// 	if (str[i] && str[i] !=127)
-	// 		i++;
-	// }
-	// if (tmp)
-	// 	str[tmp] = 'X';
+
+
+look for the letter ahead (\0 || sytVal)
+is it normall or inside a double quote

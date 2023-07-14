@@ -6,12 +6,11 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 08:24:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/11 06:54:24 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/14 14:19:42 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
-
 
 
 int	file_size(t_file *file)
@@ -64,7 +63,9 @@ int len_2d(char **str)
     int i;
 
     i = 0;
-    while (str[i])
+    if (!str)
+		return (0);
+	while (str[i])
         i++;
     return (i);
 }
@@ -74,6 +75,8 @@ t_lexer *creat_cmd(int size)
 	t_lexer *cmd;
 	t_lexer *lst;
 
+	if (!size)
+		return (NULL);
 	cmd = malloc(sizeof(t_lexer));
 	cmd->file = NULL;
 	lst = cmd;

@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/13 07:32:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/14 14:18:21 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,8 @@ int	mod_file(char *str, t_file **file, int id, int z)
 	return (1);
 }
 
-void clean_cmd(char *str)
+void clean_cmd(char *str, int sqo, int dqo, int i)
 {
-	int	i;
-
-	i = 0;
-	while (str[i++])
-	{
-		if (syt_val(str + i))
-		{
-			str[i] = ' ';
-			while (str[i++] && str[i] != ' ')
-				if (str[i])
-					str[i] = ' ';
-		}
-	}
 }
 void	check_arg(char *str, t_lexer *cmd)
 {
@@ -93,7 +80,7 @@ void	check_arg(char *str, t_lexer *cmd)
 	cmd->cmd = str;
 }
 
-t_lexer *ft_start(char **env, char *str)
+t_lexer *ft_start(char *str, t_env *var)
 {
 	int		i;
 	int		size;
@@ -101,20 +88,22 @@ t_lexer *ft_start(char **env, char *str)
 	t_lexer	*cmd;
 	t_lexer	*lst;
 
-	i = 0;
 	if (str && check_err(str))
 		return (NULL);
-	deqou_cmd(str, 0, 0, -1);
+	
+	str = ft_expand(str, var, 0, 0);
 	raw = ft_split(str, '|');
+	i = 0;
 	size = len_2d(raw);
 	cmd = creat_cmd(size);
 	lst = cmd;
 	while (raw[i])
 	{
+		
+		deqou_cmd(cmd->cmd, 0, 0, -1);
 		check_arg(raw[i], cmd);
 		cmd = cmd->next;
 		i++;
 	}
-	(void)env;
 	return (lst);
 }
