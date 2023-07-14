@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/07/14 08:31:28 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/14 14:39:01 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int main(int ac, char *av[], char *env[])
 		{
 		 	printf("*%s*\n", cmd->cmd /*cmd->file->file*/);
 		 	file = cmd->file;
-			//printf("*****ile = %s %d*****\n", file->file, file->type);
 			while (file)
 			{
 				if (file->file)
