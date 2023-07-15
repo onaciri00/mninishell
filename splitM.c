@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/15 06:38:10 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/15 17:52:09 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ void	set_type(int id, t_file **file)
 		(*file)->type = 3;
 }
 
+void clean_cmd(char *str,int j)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && i <= j)
+	{
+		str[i] = ' ';
+		i++;
+	}
+}
+
 int	mod_file(char *str, t_file **file, int id, int z)
 {
 	int		i;
@@ -32,6 +44,11 @@ int	mod_file(char *str, t_file **file, int id, int z)
 
 	i = 0;
 	j = 0;
+	if (id == 2 || id == 3)
+	{	
+		j++;
+		i++;
+	}
 	while (str[++i] && !syt_val(str + i))
 	{
 		if (str[i] != ' ')
@@ -46,42 +63,16 @@ int	mod_file(char *str, t_file **file, int id, int z)
 		if (z && str[i] == ' ')
 			break;
 	}
-	if (syt_val(str + j))
-		j++;
 	lst = new_file(file);
 	if (id == 2)
-		lst->limeter = ft_substr((const char *)str, j, i - j);
+		lst->limeter = ft_substr((const char *)str, j + 1, i - j);
 	else if (id != 2)
-		lst->file = ft_substr((const char *)str, j, i - j);
+		lst->file = ft_substr((const char *)str, j+ 1, i - j);
 	set_type(id, &lst);
+	clean_cmd(str, i - j);
 	return (1);
 }
 
-void clean_cmd(char *str,int i, int sqo, int dqo)
-{
-	int	size;
-
-	size = 0;
-	if (!sqo && str[i] == '"')
-		dqo++;
-	if (!dqo && str[i] =='\'')
-		sqo++;
-	if (sqo == 2 || dqo == 2)
-	{
-		sqo = 0;
-		dqo = 0;
-	}
-	while (str[i++])
-	{
-		if (!dqo && !sqo && syt_val(str + i))
-		{
-			str[i] = ' ';
-			while (str[i++] && str[i] != ' ')
-				if (str[i])
-					str[i] = ' ';
-		}
-	}
-}
 void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 {
 	int	i;
@@ -99,15 +90,14 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 			dqo = 0;
 		}
 		if (syt_val(str + i) == 2 && !dqo && !sqo)
-			i += mod_file(str +(i + 1), &cmd->file, 2, 0);
+			i += mod_file(str + i, &cmd->file, 2, 0);
 		else if (syt_val(str + i) == 3 && !dqo && !sqo)
-			i += mod_file(str +(i + 1), &cmd->file, 3, 0);
+			i += mod_file(str +i, &cmd->file, 3, 0);
 		else if (syt_val(str +i) == 4 && !dqo && !sqo)
 			mod_file(str + i, &cmd->file, 1, 0);
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0, 0);
 	}
-	clean_cmd(str, 0, 0, 0);
 	cmd->cmd = str;
 }
 

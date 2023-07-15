@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/14 09:14:53 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/15 17:27:23 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,12 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 	char	*tmp;
 
 	tmp = ft_substr(str, start, end - start);
-	//printf("loking for %s i = %d %d <-end\n", tmp, start, end - start);
 	var = env;
 	while (var)
 	{
 		if (ft_strnstr(var->var, tmp, ft_strlen(tmp)))
 		{
 			free(tmp);
-			//printf(".....%s\n", var->var);
 			tmp = ft_substr(var->var, end - (start - 1) , ft_strlen(var->var) - (end - start));
 			return (tmp);
 		}
@@ -107,14 +105,15 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 			sqo = 0;
 			dqo = 0;
 		}
-        if (str[i] == '$')
+        if (str[i] == '$' && str[i + 1] && str[i + 1] != '$' && str[i + 1] != '"')
 		{
 			if (sqo != 1)
-			{
-			i = ft_strmerge(&str, i, i + 1, env) - 1;
-			}
+				i = ft_strmerge(&str, i, i + 1, env) - 1;
+			printf("y%d\n", i);
 		}
-		if (str[i] && str[i] !='$')
+		else if (str[i] == '$' && sqo != 1 && (str[i +1 ] == '$' || str[i + 1] == '"' || !str[i + 1]))
+			str[i] = ' ';
+		if (str[i])
 			i++;
 	}
 	return (str);
