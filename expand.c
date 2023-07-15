@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/15 17:27:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/15 18:23:32 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 		{
 			if (sqo != 1)
 				i = ft_strmerge(&str, i, i + 1, env) - 1;
-			printf("y%d\n", i);
 		}
 		else if (str[i] == '$' && sqo != 1 && (str[i +1 ] == '$' || str[i + 1] == '"' || !str[i + 1]))
 			str[i] = ' ';

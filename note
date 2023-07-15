@@ -49,3 +49,6 @@ herdoc == "limter"-> no expand for $limter and inside it
 
 look for the letter ahead (\0 || sytVal)
 is it normall or inside a double quote
+
+
+_ SHOULD NOT EXPAND OTHER YES
