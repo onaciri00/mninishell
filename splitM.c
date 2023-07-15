@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/14 14:39:17 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/15 06:38:10 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,57 @@ int	mod_file(char *str, t_file **file, int id, int z)
 	return (1);
 }
 
+void clean_cmd(char *str,int i, int sqo, int dqo)
+{
+	int	size;
 
-void	check_arg(char *str, t_lexer *cmd)
+	size = 0;
+	if (!sqo && str[i] == '"')
+		dqo++;
+	if (!dqo && str[i] =='\'')
+		sqo++;
+	if (sqo == 2 || dqo == 2)
+	{
+		sqo = 0;
+		dqo = 0;
+	}
+	while (str[i++])
+	{
+		if (!dqo && !sqo && syt_val(str + i))
+		{
+			str[i] = ' ';
+			while (str[i++] && str[i] != ' ')
+				if (str[i])
+					str[i] = ' ';
+		}
+	}
+}
+void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 {
 	int	i;
 
 	i = -1;
 	while (str[++i])
 	{
-		if (syt_val(str + i) == 2)  
+		if (!sqo && str[i] == '"')
+			dqo++;
+		if (!dqo && str[i] =='\'')
+			sqo++;
+		if (sqo == 2 || dqo == 2)
+		{
+			sqo = 0;
+			dqo = 0;
+		}
+		if (syt_val(str + i) == 2 && !dqo && !sqo)
 			i += mod_file(str +(i + 1), &cmd->file, 2, 0);
-		else if (syt_val(str + i) == 3)
+		else if (syt_val(str + i) == 3 && !dqo && !sqo)
 			i += mod_file(str +(i + 1), &cmd->file, 3, 0);
-		else if (syt_val(str +i) == 4)
+		else if (syt_val(str +i) == 4 && !dqo && !sqo)
 			mod_file(str + i, &cmd->file, 1, 0);
-		else if (syt_val(str + i) == 5)
+		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0, 0);
 	}
-	clean_cmd(str);
+	clean_cmd(str, 0, 0, 0);
 	cmd->cmd = str;
 }
 
@@ -98,8 +131,8 @@ t_lexer *ft_start(char *str, t_env *var)
 	while (raw[i])
 	{
 		
+		check_arg(raw[i], cmd, 0, 0);
 		deqou_cmd(cmd->cmd, 0, 0, -1);
-		check_arg(raw[i], cmd);
 		cmd = cmd->next;
 		i++;
 	}
