@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/15 18:23:32 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/16 09:36:25 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 	char	*tmp;
 
 	tmp = ft_substr(str, start, end - start);
+	if (str[end - 1] == '_')
+		return (printf("....%c\n", str[end - 1]), ft_strdup(""));
 	var = env;
 	while (var)
 	{
@@ -76,7 +78,7 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if ((*str)[i] == ' ' || (*str)[i] == '"' || (*str)[i] == '$' || (*str)[i] == '\'' || syt_val(*str + i))
+		if (((*str)[i] >= 38 && (*str)[i]  <= 64 )|| ((*str)[i] >= 32 && (*str)[i] <= 47)|| syt_val(*str + i))
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
@@ -108,7 +110,7 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
         if (str[i] == '$' && str[i + 1] && str[i + 1] != '$' && str[i + 1] != '"')
 		{
 			if (sqo != 1)
-				i = ft_strmerge(&str, i, i + 1, env) - 1;
+				i = ft_strmerge(&str, i, i + 1, env);
 		}
 		else if (str[i] == '$' && sqo != 1 && (str[i +1 ] == '$' || str[i + 1] == '"' || !str[i + 1]))
 			str[i] = ' ';

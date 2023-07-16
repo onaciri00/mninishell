@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/07/14 14:39:01 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/16 08:08:30 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int main(int ac, char *av[], char *env[])
 			}
 			cmd = cmd->next;
 		}
-		free(str);
+		//free(str);
 	}
 }
