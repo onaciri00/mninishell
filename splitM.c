@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/13 07:32:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/20 08:37:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void clean_cmd(char *str)
 	i = 0;
 	while (str[i++])
 	{
-		if (syt_val(str + i))
+		if (syt_val(str + i) || str[i])
 		{
 			str[i] = ' ';
 			while (str[i++] && str[i] != ' ')

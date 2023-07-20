@@ -6,11 +6,13 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/13 07:23:41 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:19:39 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
+
+
 
 void	perfect_cmd(char *str)
 {
