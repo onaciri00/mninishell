@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 06:19:08 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/11 09:23:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/14 14:39:08 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	err_qou(char *str)
 		return (printf("syntax error: unexpected end of file\n"),1);
 	return (0);
 }
+
 
 int	err_red(char *str)
 {
