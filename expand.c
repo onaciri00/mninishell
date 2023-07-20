@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/16 09:36:25 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/20 08:24:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,22 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	return (j + z - 1);
 }
 
+int	do_expand(char *str, int i)
+{	
+	while (--i >= 0 && str[i])
+		if (str[i] != ' ')
+			break;
+	if (i <= 0)
+	{
+		if (syt_val(str) == 2)
+			return (0);
+	}
+	else
+		if (syt_val(str + (i - 1)) == 2)
+			return (0);
+	return (1);
+}
+
 char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 {
     int i;
@@ -107,13 +123,11 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 			sqo = 0;
 			dqo = 0;
 		}
-        if (str[i] == '$' && str[i + 1] && str[i + 1] != '$' && str[i + 1] != '"')
+        if (str[i] == '$' && str[i + 1] && str[i + 1] != '$' && str[i + 1] != '"' && str[i +1] != ' ')
 		{
-			if (sqo != 1)
+			if (sqo != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
 		}
-		else if (str[i] == '$' && sqo != 1 && (str[i +1 ] == '$' || str[i + 1] == '"' || !str[i + 1]))
-			str[i] = ' ';
 		if (str[i])
 			i++;
 	}
