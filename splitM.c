@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/20 09:54:20 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/20 09:54:49 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,22 @@ int	mod_file(char *str, t_file **file, int id, int z)
 	return (1);
 }
 
+void clean_cmd(char *str)
+{
+	int	i;
 
+	i = 0;
+	while (str[i++])
+	{
+		if (syt_val(str + i) || str[i])
+		{
+			str[i] = ' ';
+			while (str[i++] && str[i] != ' ')
+				if (str[i])
+					str[i] = ' ';
+		}
+	}
+}
 void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 {
 	int	i;
