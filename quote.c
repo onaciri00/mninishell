@@ -6,28 +6,40 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 11:22:37 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/21 13:34:08 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
-void	perfect_cmd(char *str, char rem1, char rem2, int id)
+void	perfect_cmd(char *str)
 {
-	int	i;
-	int	j;
+	char	*cp;
+	int		i;
+	int		size;
 
-	i = 0;
-	j = 0;
-	while (str[i])
+	i = -1;
+	size = 0;
+	while (str[++i])
+		if(str[i] != 127)
+			size++;
+	cp = malloc(sizeof(char) * size + 1);
+	i = -1;
+	size = 0;
+	while (str[++i])
 	{
-		if ((str[i] != rem1 || str[i] != rem2) && !id)
+		if (str[i] != 127)
 		{
-			str[j] = str[i];
-			j++;
-		}	
+			cp[size] = str[i];
+			size++;
+		}
 	}
-	str[j]
+	cp[size] = '\0';
+	size = -1;
+	while (cp[++size])
+		str[size] = cp[size];
+	str[size] = '\0';
+	free(cp);
 }
 
 
@@ -50,7 +62,7 @@ void    deqou_cmd(char *str, int i)
 			}
 		}
 	}
-	perfect_cmd(str, '"', '\'', 0);
+	perfect_cmd(str);
 }
 
 int	is_quote(char *str, int i)

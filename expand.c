@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 09:44:46 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/21 14:09:36 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,13 @@ t_env	*full_env(char **env)
 char *ft_findvar(char *str, int start, int end, t_env *env)
 {
 	t_env	*var;
+	char	**cp;
 	size_t		i;
 	char	*tmp;
-	//char	**spl;
 
 	if (!env)
 		return (ft_strdup(""));	
 	tmp = ft_substr(str, start, end - start);
-	printf("********%s j =%d i =%d\n", tmp, start, end);
 	var = env;
 	while (var)
 	{
@@ -71,30 +70,36 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 		{
 			free(tmp);
 			tmp = ft_substr(var->var, ft_strlen(tmp) + 1, ft_strlen(var->var) - ft_strlen(tmp));
-			
-			return (tmp);
+			if (is_quote(str, start) == 2)
+				return (tmp);
+			cp = ft_split(tmp, ' ');
+			free(tmp);
+			tmp = ft_strdup(cp[0]);
+			//free_2d(cp);
+			return(tmp);
 		}
 		var = var->next;
 	}
 	return (ft_strdup(""));
 }
 
-void	rem_dollare(char **str, int *i, int *j)
+void	rem_dollare(char *str)
 {
 	int	k;
-	int	num;
-	int	dol;
+	int	j;
 
-	k = *i + 1;
-	dol = 0;
-	num = 0;
-	while ((*str)[++k] && (*str)[k] >= 32 && (*str)[k] <= 35)
+
+	k = 0;
+	j = 0;
+	while (str[k])
 	{
-		if ((*str)[k] == '$')
-			dol++;
-		if ((*str)[k] >= 48 && (*str)[k] <= 57)
-			num++;	
+		if (str[k] == '$' && (str[k + 1] == '$' || ft_isdigit(str[k])))
+			k += 2;
+		str[j] = str[k];
+		j++;
+		k++;
 	}
+	str[j] = '\0';
 }
 
 int	ft_strmerge(char **str, int i, int j, t_env *env)
@@ -104,16 +109,12 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	char	*tmp2;
 	int		z;
 
-	rem_dollare(str, &i, &j);
 	while ((*str)[++i])
 		if (((*str)[i] >= 38 && (*str)[i]  <= 64 )|| ((*str)[i] >= 32 && (*str)[i] <= 47)|| syt_val(*str + i))
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i + j, ft_strlen(*str) - j);
-	if ((*str)[i] != '$' && i != j)
-		tmp2 = ft_findvar(*str, j, i, env);
-	else
-		tmp2 = ft_strdup("");
+	tmp2 = ft_findvar(*str, j, i, env);
 	free(*str);
 	*str = ft_strjoin(str_bef, tmp2);
 	z = ft_strlen(tmp2);
@@ -143,7 +144,8 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
     int i;
 
     i = 0;
-    while (str[i])
+    rem_dollare(str);
+	while (str[i])
     {
 		if (str[i] == '"' && !sqo)
 			dqo++;
