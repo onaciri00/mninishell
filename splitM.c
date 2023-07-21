@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/20 06:01:06 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/20 12:30:34 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ t_lexer *ft_start(char *str, t_env *var)
 	{
 		
 		check_arg(raw[i], cmd, 0, 0);
-		deqou_cmd(cmd->cmd, 0, 0, -1);
+		deqou_cmd(cmd->cmd, -1);
 		cmd = cmd->next;
 		i++;
 	}

@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/07/19 11:40:37 by onaciri          ###   ########.fr       */
+/*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
+/*   Updated: 2023/07/21 11:44:21 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "mshell.h"
 
@@ -28,6 +30,7 @@ int main(int ac, char *av[], char *env[])
 			exit(1);
 		var = full_env(env);
 		cmd = ft_start(str, var);
+		
 		while (cmd)
 		{
 		 	printf("*%s*\n", cmd->cmd /*cmd->file->file*/);
