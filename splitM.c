@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/20 12:30:34 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 05:39:52 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0, 0);
 	}
+
 	cmd->cmd = str;
 }
 
@@ -122,7 +123,7 @@ t_lexer *ft_start(char *str, t_env *var)
 	{
 		
 		check_arg(raw[i], cmd, 0, 0);
-		deqou_cmd(cmd->cmd, -1);
+		deqou_cmd(cmd->cmd, 0, 0, 0);
 		cmd = cmd->next;
 		i++;
 	}

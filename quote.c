@@ -6,50 +6,44 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 13:34:08 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 05:44:13 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
+#include "mshell.h"
+
 void	perfect_cmd(char *str)
 {
-	char	*cp;
 	int		i;
-	int		size;
+	int		j;
 
 	i = -1;
-	size = 0;
-	while (str[++i])
-		if(str[i] != 127)
-			size++;
-	cp = malloc(sizeof(char) * size + 1);
-	i = -1;
-	size = 0;
+	j = 0;
 	while (str[++i])
 	{
 		if (str[i] != 127)
 		{
-			cp[size] = str[i];
-			size++;
+			str[j] = str[i];
+			j++;
 		}
 	}
-	cp[size] = '\0';
-	size = -1;
-	while (cp[++size])
-		str[size] = cp[size];
-	str[size] = '\0';
-	free(cp);
+	str[j] = '\0';
 }
 
 
-void    deqou_cmd(char *str, int i)
+void    deqou_cmd(char *str, int sqo, int dqo, int i)
 {
 	char	quote;
 
-	while (str[++i])
+	while (str[i])
 	{
-		if (is_quote(str, i))
+		if (str[i] == '"' && !sqo)
+			dqo++;
+		else if (str[i] == '\'' && !dqo)
+			sqo++;
+		if (sqo || dqo)
 		{
 			quote = str[i];
 			str[i] = 127;
@@ -59,8 +53,12 @@ void    deqou_cmd(char *str, int i)
 			if (str[i] && str[i] == quote)
 			{
 				str[i] = 127;
+				dqo = 0;
+				sqo = 0;
 			}
 		}
+		if (str[i])
+			i++;
 	}
 	perfect_cmd(str);
 }

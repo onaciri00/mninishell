@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 14:09:36 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 05:30:28 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if (((*str)[i] >= 38 && (*str)[i]  <= 64 )|| ((*str)[i] >= 32 && (*str)[i] <= 47)|| syt_val(*str + i))
+		if (!ft_isalnum((*str)[i]) && (*str)[i] != 95)
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i + j, ft_strlen(*str) - j);
