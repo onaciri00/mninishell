@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 13:56:04 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 08:19:21 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int main(int ac, char *av[], char *env[])
 			while (file)
 			{
 				if (file->file)
-					printf("********** file = %s %d\n", file->file, file->type);
+					printf("********** file ='%s' %d\n", file->file, file->type);
 				else	
-					printf("********** lim = %s %d\n", file->limeter, file->type);
+					printf("********** lim ='%s' %d\n", file->limeter, file->type);
 				file = file->next;
 			}
 			cmd = cmd->next;

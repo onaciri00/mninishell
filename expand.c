@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 05:30:28 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 07:40:47 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,12 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 		if (!ft_strncmp(tmp, var->var, ft_strlen(tmp)) && i == ft_strlen(tmp))
 		{
 			free(tmp);
-			tmp = ft_substr(var->var, ft_strlen(tmp) + 1, ft_strlen(var->var) - ft_strlen(tmp));
+			tmp = ft_substr(var->var, i + 1, ft_strlen(var->var) - ft_strlen(tmp));
 			if (is_quote(str, start) == 2)
 				return (tmp);
 			cp = ft_split(tmp, ' ');
 			free(tmp);
 			tmp = ft_strdup(cp[0]);
-			//free_2d(cp);
 			return(tmp);
 		}
 		var = var->next;
@@ -93,7 +92,8 @@ void	rem_dollare(char *str)
 	j = 0;
 	while (str[k])
 	{
-		if (str[k] == '$' && (str[k + 1] == '$' || ft_isdigit(str[k])))
+		
+		if (str[k] == '$' && str[k + 1] && (str[k + 1] == '$' || ft_isdigit(str[k + 1])))
 			k += 2;
 		str[j] = str[k];
 		j++;
@@ -110,17 +110,19 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if (!ft_isalnum((*str)[i]) && (*str)[i] != 95)
+		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$')
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
-	str_aft = ft_substr(*str, i + j, ft_strlen(*str) - j);
+	printf("strbef %s %d\n", str_bef, i - 1);
+	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
+	printf("strAFT %s %d\n", str_aft, j);
 	tmp2 = ft_findvar(*str, j, i, env);
 	free(*str);
 	*str = ft_strjoin(str_bef, tmp2);
 	z = ft_strlen(tmp2);
 	tmp2 = ft_strjoin(*str, str_aft);
 	*str = tmp2;
-	return (j + z - 1);
+	return (j + z - 2);
 }
 
 int	do_expand(char *str, int i)
@@ -161,7 +163,7 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 			if (sqo != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
 		}
-		if (str[i])
+		if (str[i] && str[i] != '$')
 			i++;
 	}
 	return (str);

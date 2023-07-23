@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 05:44:13 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 05:53:52 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ void    deqou_cmd(char *str, int sqo, int dqo, int i)
 			while (str[i] && str[i] != quote)
 				i++;
 			if (str[i] && str[i] == quote)
-			{
 				str[i] = 127;
-				dqo = 0;
-				sqo = 0;
-			}
+			dqo = 0;
+			sqo = 0;
 		}
 		if (str[i])
 			i++;

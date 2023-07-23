@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 05:39:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 10:50:15 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ void clean_cmd(char *str,int j)
 	int	i;
 
 	i = 0;
-	while (str[i] && i <= j)
+	while (str[i] && i < j)
 	{
 		str[i] = ' ';
 		i++;
 	}
 }
 
-int	mod_file(char *str, t_file **file, int id, int z)
+int	mod_file(char *str, t_file **file, int id)
 {
 	int		i;
 	int		j;
@@ -49,27 +49,17 @@ int	mod_file(char *str, t_file **file, int id, int z)
 		j++;
 		i++;
 	}
-	while (str[++i] && !syt_val(str + i))
-	{
-		if (str[i] != ' ')
-			z++;
-		while (str[i] && str[i] == ' ' && !z)
-		{	
-			j++;
-			i++;
-			if (str[i + 1] && str[i + 1] != ' ')
-				break;
-		}
-		if (z && str[i] == ' ')
-			break;
-	}
+	while (str[++i] && str[i] == ' ' && !syt_val(str + i))
+		j++;
+	while (str[++i] && !syt_val(str + i) && str[i] != ' ');
+
 	lst = new_file(file);
 	if (id == 2)
-		lst->limeter = ft_substr((const char *)str, j + 1, i - j);
+		lst->limeter = ft_substr((const char *)str, j + 1, i - j - 1);
 	else if (id != 2)
-		lst->file = ft_substr((const char *)str, j+ 1, i - j);
+		lst->file = ft_substr((const char *)str, j+ 1, i - j - 1);
 	set_type(id, &lst);
-	clean_cmd(str, i - j);
+	clean_cmd(str, i);
 	return (1);
 }
 
@@ -90,13 +80,13 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 			dqo = 0;
 		}
 		if (syt_val(str + i) == 2 && !dqo && !sqo)
-			i += mod_file(str + i, &cmd->file, 2, 0);
+			i += mod_file(str + i, &cmd->file, 2);
 		else if (syt_val(str + i) == 3 && !dqo && !sqo)
-			i += mod_file(str +i, &cmd->file, 3, 0);
+			i += mod_file(str +i, &cmd->file, 3);
 		else if (syt_val(str +i) == 4 && !dqo && !sqo)
-			mod_file(str + i, &cmd->file, 1, 0);
+			mod_file(str + i, &cmd->file, 1);
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
-			mod_file(str + i , &cmd->file, 0, 0);
+			mod_file(str + i , &cmd->file, 0);
 	}
 
 	cmd->cmd = str;
