@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 08:19:21 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 18:28:59 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int main(int ac, char *av[], char *env[])
 	t_lexer *cmd;
 	t_file *file;
 	t_env	*var;
+	int i;
 
 	if (ac != 1 || !ft_strnstr(av[0], "./minishell", 11))
 		return (1);
@@ -33,12 +34,14 @@ int main(int ac, char *av[], char *env[])
 		
 		while (cmd)
 		{
-		 	printf("*%s*\n", cmd->cmd /*cmd->file->file*/);
+		 	i = -1;
+			while (cmd->cmd[++i])
+				printf("*%s* ", cmd->cmd[i] /*cmd->file->file*/);
 		 	file = cmd->file;
 			while (file)
 			{
 				if (file->file)
-					printf("********** file ='%s' %d\n", file->file, file->type);
+					printf("\n********** file ='%s' %d\n", file->file, file->type);
 				else	
 					printf("********** lim ='%s' %d\n", file->limeter, file->type);
 				file = file->next;

@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 10:50:15 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 18:22:47 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	mod_file(char *str, t_file **file, int id)
 
 void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 {
-	int	i;
+	int		i;
+	char	**ret;
 
 	i = -1;
 	while (str[++i])
@@ -88,8 +89,9 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0);
 	}
-
-	cmd->cmd = str;
+	ret = ft_split(str, ' ');
+	cmd->cmd = ret;
+	free(str);
 }
 
 t_lexer *ft_start(char *str, t_env *var)
@@ -113,7 +115,7 @@ t_lexer *ft_start(char *str, t_env *var)
 	{
 		
 		check_arg(raw[i], cmd, 0, 0);
-		deqou_cmd(cmd->cmd, 0, 0, 0);
+		rem_quote(cmd);
 		cmd = cmd->next;
 		i++;
 	}

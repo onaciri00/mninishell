@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 07:40:47 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 11:14:10 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,15 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$')
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
-	printf("strbef %s %d\n", str_bef, i - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
-	printf("strAFT %s %d\n", str_aft, j);
 	tmp2 = ft_findvar(*str, j, i, env);
 	free(*str);
 	*str = ft_strjoin(str_bef, tmp2);
 	z = ft_strlen(tmp2);
 	tmp2 = ft_strjoin(*str, str_aft);
 	*str = tmp2;
+	if (j + z -2 < 0)
+		return (0);
 	return (j + z - 2);
 }
 
@@ -158,12 +158,12 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
 			sqo = 0;
 			dqo = 0;
 		}
-        if (str[i] == '$' && str[i + 1] /*&& str[i + 1] != '$' &&*/ && str[i + 1] != '"' && str[i +1] != ' ')
+        if (str[i] == '$' && str[i + 1] && str[i + 1] != '"' && str[i +1] != ' ')
 		{
 			if (sqo != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
 		}
-		if (str[i] && str[i] != '$')
+		if ((str[i] && str[i] != '$') || (str[i +1] && str[i + 1] == '"'))
 			i++;
 	}
 	return (str);

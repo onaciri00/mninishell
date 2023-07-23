@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/22 19:03:11 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 18:19:50 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_file
     
 typedef struct s_lexer
 {
-    char	        *cmd;
+    char	        **cmd;
     t_file	        *file;
 	t_env			*env;
     int             inf;
@@ -65,5 +65,6 @@ t_env	*full_env(char **env);
 char*    ft_expand(char *str, t_env *env, int dqo, int sqo);
 int	is_quote(char *str, int i);
 void	showerror(char *str);
+void	rem_quote(t_lexer *cmd);
 
 #endif

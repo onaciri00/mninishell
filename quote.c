@@ -6,13 +6,32 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 05:53:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/23 18:23:31 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
 #include "mshell.h"
+
+void	rem_quote(t_lexer *cmd)
+{
+	t_file	*file;
+	int		i;
+
+	file = cmd->file;
+	i = -1;
+		while (cmd->cmd[++i])
+			deqou_cmd(cmd->cmd[i], 0, 0, 0);
+		while (file)
+		{
+			if (file->file)
+				deqou_cmd(file->file, 0, 0, 0);
+			else if (file->limeter)
+				deqou_cmd(file->limeter, 0, 0, 0);
+			file = file->next;
+		}
+}
 
 void	perfect_cmd(char *str)
 {
