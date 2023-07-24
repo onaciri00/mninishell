@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 11:14:10 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:42:29 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	do_expand(char *str, int i)
 	return (1);
 }
 
-char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
+char   *ft_expand(char *str, t_env *env, int v)
 {
     int i;
 
@@ -149,21 +149,14 @@ char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
     rem_dollare(str);
 	while (str[i])
     {
-		if (str[i] == '"' && !sqo)
-			dqo++;
-		else if (str[i] == '\'' && !dqo)
-			sqo++;
-		if (sqo == 2 || dqo == 2)
-		{
-			sqo = 0;
-			dqo = 0;
-		}
         if (str[i] == '$' && str[i + 1] && str[i + 1] != '"' && str[i +1] != ' ')
 		{
-			if (sqo != 1 && do_expand(str , i))
+			if (is_quote(str, i) != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
+			else if (v)
+				i = ft_strmerge(&str, i, i + 1, env);	
 		}
-		if ((str[i] && str[i] != '$') || (str[i +1] && str[i + 1] == '"'))
+		if ((str[i]) || (str[i + 1] && (str[i + 1] == '"' || str[i + 1] == '\'')))
 			i++;
 	}
 	return (str);
