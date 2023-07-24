@@ -6,13 +6,13 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 05:56:33 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:44:59 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
-int	open_her(char *str)
+int	open_her(char *str, int v, t_env *var)
 {
 	char	*lim;
 	int		fd[2];
@@ -23,8 +23,10 @@ int	open_her(char *str)
 	while (1)
 	{
 		lim = readline(">");
-		if (ft_strlen(lim) == (ft_strlen(str) && ft_strncmp(lim, str, ft_strlen(lim))))
+		if (ft_strlen(lim) == (ft_strlen(str) && !ft_strncmp(lim, str, ft_strlen(lim))))
 			break;
+		if (v)
+			ft_expand(str, var, v);
 		write(fd[1], lim, ft_strlen(lim));
 		free(lim);
 	}
@@ -51,7 +53,7 @@ void	open_file(t_lexer *cmd, t_file *file)
 				fd = open(new->file, O_CREAT | O_RDWR | O_TRUNC, 0666);
 		}
 		else if (new->limeter)
-			fd = open_her(new->limeter);
+			fd = open_her(new->limeter, file->lim_con, cmd->env);
 		if (fd == -1 && new->file)
 			printf("PROBLEM IN OPENING %s\n", new->file);
 		else if (fd == -1 && new->limeter)

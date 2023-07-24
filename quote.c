@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 06:10:15 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:13:04 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	rem_quote(t_lexer *cmd)
 			deqou_cmd(file->file, 0, 0, 0);
 		else if (file->limeter)
 		{
-			if (lim_state(file->limter))
-				file->state = 1;
+			if (lim_state(file->limeter))
+				file->lim_con = 1;
 			else
-				file->state = 0;
+				file->lim_con = 0;
 			deqou_cmd(file->limeter, 0, 0, 0);
 		}
 		file = file->next;

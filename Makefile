@@ -1,4 +1,6 @@
-SRC =   h_error.c genarl.c main.c splitM.c  quote.c expand.c #  c.c
+SRC =   h_error.c genarl.c main.c splitM.c  quote.c expand.c o_file.c #  c.c
+
+HEADER = mshell.h
 
 HEADER = mshell.h
 
@@ -10,7 +12,7 @@ LIB = -Llibft -lft
 
 all: $(NAME) runlibft
 
-$(NAME): $(SRC)
+$(NAME): $(SRC) $(HEADER)
 	cc $(CFLAGS) $(SRC) $(LIB) -lreadline -o $(NAME)
 
 runlibft:
