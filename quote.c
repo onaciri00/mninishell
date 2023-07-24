@@ -6,13 +6,26 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 18:23:31 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:10:15 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
 #include "mshell.h"
+
+int	lim_state(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '"' || str[i] == '\'')
+			return (1);
+	}
+	return (0);
+}
 
 void	rem_quote(t_lexer *cmd)
 {
@@ -21,16 +34,22 @@ void	rem_quote(t_lexer *cmd)
 
 	file = cmd->file;
 	i = -1;
-		while (cmd->cmd[++i])
-			deqou_cmd(cmd->cmd[i], 0, 0, 0);
-		while (file)
+	while (cmd->cmd[++i])
+		deqou_cmd(cmd->cmd[i], 0, 0, 0);
+	while (file)
+	{
+		if (file->file)
+			deqou_cmd(file->file, 0, 0, 0);
+		else if (file->limeter)
 		{
-			if (file->file)
-				deqou_cmd(file->file, 0, 0, 0);
-			else if (file->limeter)
-				deqou_cmd(file->limeter, 0, 0, 0);
-			file = file->next;
+			if (lim_state(file->limter))
+				file->state = 1;
+			else
+				file->state = 0;
+			deqou_cmd(file->limeter, 0, 0, 0);
 		}
+		file = file->next;
+	}
 }
 
 void	perfect_cmd(char *str)

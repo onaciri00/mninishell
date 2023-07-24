@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/23 18:19:50 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 05:57:45 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_file
 {
 	int		type;
     char    *limeter;
+    int     lim_con;
     char    *file;
     struct s_file *next;
 } t_file;

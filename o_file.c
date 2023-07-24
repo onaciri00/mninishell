@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/22 17:06:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 05:56:33 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	open_file(t_lexer *cmd, t_file *file)
 		if (fd == -1 && new->file)
 			printf("PROBLEM IN OPENING %s\n", new->file);
 		else if (fd == -1 && new->limeter)
-			printf("PROBLEM IN HERDOC\n");
+			printf("PROBLEM IN OPENING HERDOC\n");
 		if (new->type == 0 || new->type == 2)
 			cmd->inf = fd;
 		else if (new->type == 3 || new->type == 1)
