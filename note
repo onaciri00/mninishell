@@ -45,10 +45,34 @@ if more come just keep skeping tell you find letter if ended thand put \0 in the
 herdoc == "limter"-> no expand for $limter and inside it
 
 
+// void	perfect_cmd(char *str, char rem1, char rem2, int id)
+// {
+// 	char	*cp;
+// 	int		i;
+// 	int		size;
+
+// 	i = -1;
+// 	size = 0;
+// 	while (str[++i])
+// 		if(str[i] != 127)
+// 			size++;
+// 	cp = malloc(sizeof(char) * size + 1);
+// 	i = -1;
+// 	size = 0;
+// 	while (str[++i])
+// 	{
+// 		if (str[i] != 127)
+// 		{
+// 			cp[size] = str[i];
+// 			size++;
+// 		}
+// 	}
+// 	cp[size] = '\0';
+// 	size = -1;
+// 	while (cp[++size])
+// 		str[size] = cp[size];
+// 	str[size] = '\0';
+// 	free(cp);
+// }
 
 
-look for the letter ahead (\0 || sytVal)
-is it normall or inside a double quote
-
-
-_ SHOULD NOT EXPAND OTHER YES

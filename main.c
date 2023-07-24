@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/07/19 11:40:37 by onaciri          ###   ########.fr       */
+/*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
+/*   Updated: 2023/07/24 06:51:34 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "mshell.h"
 
@@ -18,6 +20,7 @@ int main(int ac, char *av[], char *env[])
 	t_lexer *cmd;
 	t_file *file;
 	t_env	*var;
+	int i;
 
 	if (ac != 1 || !ft_strnstr(av[0], "./minishell", 11))
 		return (1);
@@ -28,16 +31,20 @@ int main(int ac, char *av[], char *env[])
 			exit(1);
 		var = full_env(env);
 		cmd = ft_start(str, var);
+		
 		while (cmd)
 		{
-		 	printf("*%s*\n", cmd->cmd /*cmd->file->file*/);
-		 	file = cmd->file;
+		 	i = -1;
+			while (cmd->cmd[++i])
+				printf("*%s* ", cmd->cmd[i] /*cmd->file->file*/);
+		 	printf("\n\n%d %d", cmd->inf, cmd->outf);
+			file = cmd->file;
 			while (file)
 			{
 				if (file->file)
-					printf("********** file = %s %d\n", file->file, file->type);
+					printf("\n********** file ='%s' %d\n", file->file, file->type);
 				else	
-					printf("********** lim = %s %d\n", file->limeter, file->type);
+					printf("********** lim ='%s' %d\n", file->limeter, file->type);
 				file = file->next;
 			}
 			cmd = cmd->next;

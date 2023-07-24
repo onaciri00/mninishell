@@ -6,12 +6,17 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 08:24:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/16 11:50:14 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/22 15:53:45 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
+void	showerror(char *str)
+{
+	perror(str);
+	exit(1);
+}
 
 int	file_size(t_file *file)
 {
@@ -39,7 +44,6 @@ t_file	*new_file(t_file  **file)
 		(*file) = malloc(sizeof(t_file));
 		(*file)->next = NULL;
 		(*file)->limeter = NULL;
-		(*file)->state = -1;
 		(*file)->file = NULL;
 		(*file)->type = -1;
 		return (*file);
@@ -52,7 +56,6 @@ t_file	*new_file(t_file  **file)
 		new = malloc(sizeof(t_file));
 		new->next = NULL;
 		new->limeter = NULL;
-		new->state = -1;
 		new->file = NULL;
 		new->type = -1;
 		lst->next = new;

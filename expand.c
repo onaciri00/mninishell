@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/20 08:24:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:42:29 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,59 @@ t_env	*full_env(char **env)
 	return (var);
 }
 
+
 char *ft_findvar(char *str, int start, int end, t_env *env)
 {
 	t_env	*var;
+	char	**cp;
+	size_t		i;
 	char	*tmp;
 
+	if (!env)
+		return (ft_strdup(""));	
 	tmp = ft_substr(str, start, end - start);
-	if (str[end - 1] == '_')
-		return (printf("....%c\n", str[end - 1]), ft_strdup(""));
 	var = env;
 	while (var)
 	{
-		if (ft_strnstr(var->var, tmp, ft_strlen(tmp)))
+		i = -1;
+		while (var->var[++i] && var->var[i] != '=');
+
+		if (!ft_strncmp(tmp, var->var, ft_strlen(tmp)) && i == ft_strlen(tmp))
 		{
 			free(tmp);
-			tmp = ft_substr(var->var, end - (start - 1) , ft_strlen(var->var) - (end - start));
-			return (tmp);
+			tmp = ft_substr(var->var, i + 1, ft_strlen(var->var) - ft_strlen(tmp));
+			if (is_quote(str, start) == 2)
+				return (tmp);
+			cp = ft_split(tmp, ' ');
+			free(tmp);
+			tmp = ft_strdup(cp[0]);
+			return(tmp);
 		}
 		var = var->next;
 	}
 	return (ft_strdup(""));
 }
+
+void	rem_dollare(char *str)
+{
+	int	k;
+	int	j;
+
+
+	k = 0;
+	j = 0;
+	while (str[k])
+	{
+		
+		if (str[k] == '$' && str[k + 1] && (str[k + 1] == '$' || ft_isdigit(str[k + 1])))
+			k += 2;
+		str[j] = str[k];
+		j++;
+		k++;
+	}
+	str[j] = '\0';
+}
+
 int	ft_strmerge(char **str, int i, int j, t_env *env)
 {
 	char	*str_bef;
@@ -78,7 +110,7 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if (((*str)[i] >= 38 && (*str)[i]  <= 64 )|| ((*str)[i] >= 32 && (*str)[i] <= 47)|| syt_val(*str + i))
+		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$')
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
@@ -88,7 +120,9 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	z = ft_strlen(tmp2);
 	tmp2 = ft_strjoin(*str, str_aft);
 	*str = tmp2;
-	return (j + z - 1);
+	if (j + z -2 < 0)
+		return (0);
+	return (j + z - 2);
 }
 
 int	do_expand(char *str, int i)
@@ -107,28 +141,22 @@ int	do_expand(char *str, int i)
 	return (1);
 }
 
-char   *ft_expand(char *str, t_env *env, int dqo, int sqo)
+char   *ft_expand(char *str, t_env *env, int v)
 {
     int i;
 
     i = 0;
-    while (str[i])
+    rem_dollare(str);
+	while (str[i])
     {
-		if (str[i] == '"' && !sqo)
-			dqo++;
-		else if (str[i] == '\'' && !dqo)
-			sqo++;
-		if (sqo == 2 || dqo == 2)
+        if (str[i] == '$' && str[i + 1] && str[i + 1] != '"' && str[i +1] != ' ')
 		{
-			sqo = 0;
-			dqo = 0;
-		}
-        if (str[i] == '$' && str[i + 1] && str[i + 1] != '$' && str[i + 1] != '"' && str[i +1] != ' ')
-		{
-			if (sqo != 1 && do_expand(str , i))
+			if (is_quote(str, i) != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
+			else if (v)
+				i = ft_strmerge(&str, i, i + 1, env);	
 		}
-		if (str[i])
+		if ((str[i]) || (str[i + 1] && (str[i + 1] == '"' || str[i + 1] == '\'')))
 			i++;
 	}
 	return (str);

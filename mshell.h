@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/16 11:48:03 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 06:48:04 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #define MSHELL_H
 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -24,6 +25,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libft/libft.h"
+#include <fcntl.h>
 
 typedef struct s_env
 {
@@ -35,16 +37,18 @@ typedef struct s_file
 {
 	int		type;
     char    *limeter;
+    int     lim_con;
     char    *file;
-    int     state;
     struct s_file *next;
 } t_file;
     
 typedef struct s_lexer
 {
-    char	        *cmd;
+    char	        **cmd;
     t_file	        *file;
 	t_env			*env;
+    int             inf;
+    int             outf;
     struct s_lexer  *next;
     
 }	t_lexer;
@@ -59,5 +63,10 @@ t_file  *new_file(t_file  **file);
 void    deqou_cmd(char *str, int sqo, int dqo, int i);
 void	env_new(t_env **var, char *env);
 t_env	*full_env(char **env);
-char*    ft_expand(char *str, t_env *env, int dqo, int sqo);
+char*    ft_expand(char *str, t_env *env, int v);
+int	    is_quote(char *str, int i);
+void	showerror(char *str);
+void	rem_quote(t_lexer *cmd);
+void	open_file(t_lexer *cmd, t_file *file);
+
 #endif
