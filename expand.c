@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 06:42:29 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 10:48:17 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_env	*full_env(char **env)
 
 char *ft_findvar(char *str, int start, int end, t_env *env)
 {
-	t_env	*var;
+	//t_env	*var;
 	char	**cp;
 	size_t		i;
 	char	*tmp;
@@ -60,26 +60,26 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 	if (!env)
 		return (ft_strdup(""));	
 	tmp = ft_substr(str, start, end - start);
-	var = env;
-	while (var)
+	//var = env;
+	while (env)
 	{
 		i = -1;
-		while (var->var[++i] && var->var[i] != '=');
+		while (env->var[++i] && env->var[i] != '=');
 
-		if (!ft_strncmp(tmp, var->var, ft_strlen(tmp)) && i == ft_strlen(tmp))
+		if (!ft_strncmp(tmp, env->var, ft_strlen(tmp)) && i == ft_strlen(tmp))
 		{
 			free(tmp);
-			tmp = ft_substr(var->var, i + 1, ft_strlen(var->var) - ft_strlen(tmp));
+			tmp = ft_substr(env->var, i + 1, ft_strlen(env->var) - ft_strlen(tmp));
 			if (is_quote(str, start) == 2)
 				return (tmp);
 			cp = ft_split(tmp, ' ');
 			free(tmp);
 			tmp = ft_strdup(cp[0]);
-			return(tmp);
+			return(free_2d(cp), tmp);
 		}
-		var = var->next;
+		env = env->next;
 	}
-	return (ft_strdup(""));
+	return (free(tmp), ft_strdup(""));
 }
 
 void	rem_dollare(char *str)
@@ -94,7 +94,11 @@ void	rem_dollare(char *str)
 	{
 		
 		if (str[k] == '$' && str[k + 1] && (str[k + 1] == '$' || ft_isdigit(str[k + 1])))
+		{
+			str[j] = ' ';
+			j++;
 			k += 2;
+		}
 		str[j] = str[k];
 		j++;
 		k++;
@@ -114,15 +118,16 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 			break;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
+	
 	tmp2 = ft_findvar(*str, j, i, env);
 	free(*str);
 	*str = ft_strjoin(str_bef, tmp2);
-	z = ft_strlen(tmp2);
+	z = ft_strlen(*str);
 	tmp2 = ft_strjoin(*str, str_aft);
 	*str = tmp2;
-	if (j + z -2 < 0)
+	if (z - 1 < 0)
 		return (0);
-	return (j + z - 2);
+	return (z - 1);
 }
 
 int	do_expand(char *str, int i)
@@ -154,9 +159,9 @@ char   *ft_expand(char *str, t_env *env, int v)
 			if (is_quote(str, i) != 1 && do_expand(str , i))
 				i = ft_strmerge(&str, i, i + 1, env);
 			else if (v)
-				i = ft_strmerge(&str, i, i + 1, env);	
+				i = ft_strmerge(&str, i, i + 1, env);
 		}
-		if ((str[i]) || (str[i + 1] && (str[i + 1] == '"' || str[i + 1] == '\'')))
+		if (str[i] && str[i] != '$' && is_quote(str, i) != 1)
 			i++;
 	}
 	return (str);

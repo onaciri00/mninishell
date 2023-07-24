@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 06:48:04 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 08:24:26 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ int	    is_quote(char *str, int i);
 void	showerror(char *str);
 void	rem_quote(t_lexer *cmd);
 void	open_file(t_lexer *cmd, t_file *file);
+void    free_2d(char **str);
 
 #endif
