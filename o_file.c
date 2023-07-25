@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 06:44:59 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/25 14:32:23 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,22 @@ int	open_her(char *str, int v, t_env *var)
 
 	if (pipe(fd) == -1)
 		return (-1);
-	
 	while (1)
 	{
 		lim = readline(">");
-		if (ft_strlen(lim) == (ft_strlen(str) && !ft_strncmp(lim, str, ft_strlen(lim))))
+		if (!lim || (ft_strlen(lim) == ft_strlen(str) && !ft_strncmp(lim, str, ft_strlen(lim))))
 			break;
-		if (v)
-			ft_expand(str, var, v);
+		if (!v)
+			ft_expand(&lim, var, v);
+		printf("### %s ##\n", lim);
 		write(fd[1], lim, ft_strlen(lim));
 		free(lim);
 	}
-	free(lim);
 	close(fd[1]);
-	return(fd[0]);
+	return(free(lim), fd[0]);
 }
 
-void	open_file(t_lexer *cmd, t_file *file)
+void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 {
 	t_file	*new;
 	int		fd;
@@ -53,7 +52,7 @@ void	open_file(t_lexer *cmd, t_file *file)
 				fd = open(new->file, O_CREAT | O_RDWR | O_TRUNC, 0666);
 		}
 		else if (new->limeter)
-			fd = open_her(new->limeter, file->lim_con, cmd->env);
+			fd = open_her(new->limeter, file->lim_con, env);
 		if (fd == -1 && new->file)
 			printf("PROBLEM IN OPENING %s\n", new->file);
 		else if (fd == -1 && new->limeter)

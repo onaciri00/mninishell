@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 08:36:59 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/25 14:27:15 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_lexer *ft_start(char *str, t_env *var)
 
 	if (str && check_err(str))
 		return (NULL);
-	str = ft_expand(str, var, 0);
+	str = ft_expand(&str, var, 0);
 	raw = ft_split(str, '|');
 	i = 0;
 	size = len_2d(raw);
@@ -117,7 +117,7 @@ t_lexer *ft_start(char *str, t_env *var)
 		
 		check_arg(raw[i], cmd, 0, 0);
 		rem_quote(cmd);
-		open_file(cmd, cmd->file);
+		open_file(cmd, cmd->file, var);
 		cmd = cmd->next;
 		i++;
 	}

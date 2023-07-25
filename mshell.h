@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 08:24:26 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/25 14:27:00 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ t_file  *new_file(t_file  **file);
 void    deqou_cmd(char *str, int sqo, int dqo, int i);
 void	env_new(t_env **var, char *env);
 t_env	*full_env(char **env);
-char*    ft_expand(char *str, t_env *env, int v);
+char*    ft_expand(char **str, t_env *env, int v);
 int	    is_quote(char *str, int i);
 void	showerror(char *str);
 void	rem_quote(t_lexer *cmd);
-void	open_file(t_lexer *cmd, t_file *file);
+void	open_file(t_lexer *cmd, t_file *file, t_env *env);
 void    free_2d(char **str);
 
 #endif

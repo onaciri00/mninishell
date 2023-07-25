@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 06:51:34 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/24 18:38:13 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int main(int ac, char *av[], char *env[])
 		str = readline("minshell: ");
 		if(!str)
 			exit(1);
+		add_history(str);
 		var = full_env(env);
 		cmd = ft_start(str, var);
 		
@@ -37,8 +38,8 @@ int main(int ac, char *av[], char *env[])
 		 	i = -1;
 			while (cmd->cmd[++i])
 				printf("*%s* ", cmd->cmd[i] /*cmd->file->file*/);
-		 	printf("\n\n%d %d", cmd->inf, cmd->outf);
 			file = cmd->file;
+			printf("\n");
 			while (file)
 			{
 				if (file->file)
