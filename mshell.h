@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 07:43:53 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 11:36:25 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,7 @@ void	rem_quote(t_lexer *cmd);
 void	open_file(t_lexer *cmd, t_file *file, t_env *env);
 void    free_2d(char **str);
 void	pipex(t_lexer  *cmd, char **env);
+void	free_all(t_lexer *cmd);
+int	fd_pipe(void);
 
 #endif

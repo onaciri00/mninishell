@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 09:42:46 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 15:45:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*ft_path(char *path_cmd, char **env)
 	return (ft_free(dev, path), free(sub_path), cmd1);
 }
 
-void	children(char **str, char **env, int fdout, int i)
+void	children(t_lexer *cmd, char **env, int first, int i)
 {
 	int		id;
 	char	*path;
@@ -105,61 +105,60 @@ void	children(char **str, char **env, int fdout, int i)
 	if (id == 0)
 	{
 		close(fd[0]);
-		if (fdout < 0 && !i)
+		if (cmd->inf == -2 && !first)
+			cmd->inf = fd_pipe();
+		else if (cmd->inf >= 0)
+			dup2(cmd->inf, STDIN_FILENO);
+		if (cmd->outf < 0 && !i)
 			dup2(fd[1], STDOUT_FILENO);
-		else if (fdout > 0)
-			dup2(fdout, STDOUT_FILENO);
-		else if (fdout < 0 && i)
+		else if (cmd->outf >= 0)
+		{
+			printf(" str %d\n", cmd->outf);
+			dup2(cmd->outf, STDOUT_FILENO);
+		}
+		else if (cmd->outf < 0 && i)
 			 dup2(o_out, STDOUT_FILENO);
-		path = ft_path(str[0], env);
-		if (execve(path, str, env) == -1)
+		path = ft_path(cmd->cmd[0], env);
+		if (execve(path, cmd->cmd, env) == -1)
 			write(1, "ERROR:execve probleme", 22);
 	}
 	else
 	{
 		close(fd[1]);
 		wait(0);
-		if (fdout > -1)
+		//printf("dol\n");
+		if (cmd->outf >= 0)
 		{
-			dup2(fdout, STDIN_FILENO);
+			close(cmd->outf);
+			int v = open((const char *)cmd->file->file, O_RDONLY);
+			dup2(v, STDIN_FILENO);
 			close(fd[0]);
 		}
-		else
+		else if (cmd->outf < 0) 
 			dup2(fd[0], STDIN_FILENO);
 	}
 }
 
-// void	final_child(char **str, char **env, int fdout)
-// {
-// 	char *path;
-// 	//int		id;
-
- //	int o_out = dup(STDOUT_FILENO);
-// 	if (fdout < 0)
-// 		return ;
-// 	if (fdout != 1)
-// 		dup2(fdout, STDOUT_FILENO);
-// 	else
-// 		dup2(o_out, STDOUT_FILENO);
-// 	path = ft_path(str[0], env);
-// 	printf("%d\n", fdout);
-// 	if (execve(path, str, env) == -1)
-// 		(write(1, "ERROR:execve probleme", 22), exit(1));
-// }
-
 void	pipex(t_lexer  *cmd, char **env)
 {
 	int	i;
+	int	j;
+	int file;
 
 	i = 0;
+	j = 0;
+	file = dup(STDIN_FILENO);
 	while (cmd)
 	{
 		if (!cmd->next)
 			i = 1;
-		dup2(cmd->inf, STDIN_FILENO);
-		children(cmd->cmd, env, cmd->outf, i);
+		if (cmd->inf != -1)
+		{	
+			children(cmd, env, cmd->outf, i);
+			close(cmd->inf);
+		}
+		j++;
 		cmd = cmd->next;
 	}
-	printf("all good\n");
-	//final_child(cmd->cmd, env, cmd->outf);
+	dup2(file, STDIN_FILENO);
 }

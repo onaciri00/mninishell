@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 09:40:27 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 14:39:40 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,14 @@ int	open_her(char *str, int v, t_env *var)
 	return(free(lim), fd[0]);
 }
 
-int	fd_pipe(int	x)
+int	fd_pipe(void)
 {
 	int	fd[2];
 
 	if (pipe(fd) == -1)
 		printf("error \n");
-	if (x == 0)
-	{
 		close(fd[1]);
 		return (fd[0]);
-	}
-	return (STDOUT_FILENO);	
 }
 
 void	open_file(t_lexer *cmd, t_file *file, t_env *env)
@@ -54,8 +50,8 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 	int		fd;
 
 	new = file;
-	cmd->inf = -1;
-	cmd->outf = -1;
+	cmd->inf = -2;
+	cmd->outf = -2;
 	while (new)
 	{
 		if (new->file)
@@ -79,9 +75,4 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			cmd->outf = fd;
 		new = new->next;
 	}
-	if (cmd->inf < 0)
-		cmd->inf = fd_pipe(0);
-	else if (cmd->outf < 0)
-		cmd->outf = 1;
-	
 }
