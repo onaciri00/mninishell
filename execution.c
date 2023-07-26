@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 15:45:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 17:35:50 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ char	*ft_path(char *path_cmd, char **env)
 	int		i;
 
 	i = 0;
+	if (access(path_cmd, X_OK) == 0)
+		return (path_cmd);
 	while (env[i] && !ft_strnstr(env[i], "PATH=", ft_strlen("PATH=")))
 		i++;
 	if (!env[i])
@@ -80,7 +82,7 @@ char	*ft_path(char *path_cmd, char **env)
 	i = -1;
 	sub_path = ft_strjoinp(path[0], "/");
 	cmd1 = ft_strjoinp(sub_path, dev[0]);
-	while ((access(cmd1, F_OK) == -1) && path[++i] != NULL)
+	while ((access(cmd1, X_OK) == -1) && path[++i] != NULL)
 	{
 		free(sub_path);
 		free(cmd1);
@@ -113,14 +115,13 @@ void	children(t_lexer *cmd, char **env, int first, int i)
 			dup2(fd[1], STDOUT_FILENO);
 		else if (cmd->outf >= 0)
 		{
-			printf(" str %d\n", cmd->outf);
 			dup2(cmd->outf, STDOUT_FILENO);
 		}
-		else if (cmd->outf < 0 && i)
+		else if (cmd->outf == -2 && i)
 			 dup2(o_out, STDOUT_FILENO);
 		path = ft_path(cmd->cmd[0], env);
 		if (execve(path, cmd->cmd, env) == -1)
-			write(1, "ERROR:execve probleme", 22);
+			(write(2, "ERROR:execve probleme\n", 23), exit(127));
 	}
 	else
 	{
@@ -129,9 +130,7 @@ void	children(t_lexer *cmd, char **env, int first, int i)
 		//printf("dol\n");
 		if (cmd->outf >= 0)
 		{
-			close(cmd->outf);
-			int v = open((const char *)cmd->file->file, O_RDONLY);
-			dup2(v, STDIN_FILENO);
+			dup2(cmd->outf, STDIN_FILENO);
 			close(fd[0]);
 		}
 		else if (cmd->outf < 0) 

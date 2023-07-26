@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/25 14:26:49 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 16:59:40 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,14 +154,14 @@ char   *ft_expand(char **str, t_env *env, int v)
     rem_dollare(*str);
 	while ((*str)[i])
     {
-        if ((*str)[i] == '$' && (*str)[i + 1] && (*str)[i + 1] != '"' && (*str)[i +1] != ' ')
+        if ((*str)[i] == '$' && (*str)[i + 1] && (*str)[i + 1] != '"' && (*str)[i +1] != ' ' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95))
 		{
 			if (is_quote(*str, i) != 1 && do_expand(*str , i))
 				i = ft_strmerge(str, i, i + 1, env);
 			else if (v)
 				i = ft_strmerge(str, i, i + 1, env);
 		}
-		if (((*str)[i] && (*str)[i] != '$' ) || is_quote(*str, i) == 1 || v || !do_expand(*str, i))
+		if (((*str)[i] && (*str)[i] != '$' ) || is_quote(*str, i) == 1 || v || !do_expand(*str, i) || (!(*str)[i + 1] || (*str)[i + 1] == ' ')  ||(!ft_isalnum((*str)[i + 1])))
 			i++;
 	}
 	return (*str);

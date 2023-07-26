@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 14:39:40 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 17:41:48 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	open_her(char *str, int v, t_env *var)
 			break;
 		if (!v)
 			ft_expand(&lim, var, v);
-		printf("### %s ##\n", lim);
 		write(fd[1], lim, ft_strlen(lim));
+		write(fd[1], "\n", 1);
 		free(lim);
 	}
 	close(fd[1]);
@@ -59,9 +59,9 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			if (new->type == 0)
 				fd = open(new->file, O_RDONLY);
 			else if (new->type == 1)
-				fd = open(new->file, O_CREAT | O_RDWR |O_TRUNC, 0666);
+				fd = open(new->file, O_CREAT | O_WRONLY |O_TRUNC, 0666);
 			else if (new->type == 3)
-				fd = open(new->file, O_CREAT | O_RDWR |  O_APPEND, 0666);
+				fd = open(new->file, O_CREAT | O_WRONLY |  O_APPEND, 0666);
 		}
 		else if (new->limeter)
 			fd = open_her(new->limeter, file->lim_con, env);
