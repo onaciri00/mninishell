@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/25 14:32:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 09:40:27 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,28 @@ int	open_her(char *str, int v, t_env *var)
 	return(free(lim), fd[0]);
 }
 
+int	fd_pipe(int	x)
+{
+	int	fd[2];
+
+	if (pipe(fd) == -1)
+		printf("error \n");
+	if (x == 0)
+	{
+		close(fd[1]);
+		return (fd[0]);
+	}
+	return (STDOUT_FILENO);	
+}
+
 void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 {
 	t_file	*new;
 	int		fd;
 
 	new = file;
+	cmd->inf = -1;
+	cmd->outf = -1;
 	while (new)
 	{
 		if (new->file)
@@ -47,9 +63,9 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			if (new->type == 0)
 				fd = open(new->file, O_RDONLY);
 			else if (new->type == 1)
-				fd = open(new->file, O_CREAT | O_RDWR | O_APPEND, 0666);
+				fd = open(new->file, O_CREAT | O_RDWR |O_TRUNC, 0666);
 			else if (new->type == 3)
-				fd = open(new->file, O_CREAT | O_RDWR | O_TRUNC, 0666);
+				fd = open(new->file, O_CREAT | O_RDWR |  O_APPEND, 0666);
 		}
 		else if (new->limeter)
 			fd = open_her(new->limeter, file->lim_con, env);
@@ -63,4 +79,9 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			cmd->outf = fd;
 		new = new->next;
 	}
+	if (cmd->inf < 0)
+		cmd->inf = fd_pipe(0);
+	else if (cmd->outf < 0)
+		cmd->outf = 1;
+	
 }

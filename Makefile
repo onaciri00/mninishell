@@ -1,4 +1,4 @@
-SRC =   h_error.c genarl.c main.c splitM.c  quote.c expand.c o_file.c free.c #  c.c
+SRC =   h_error.c genarl.c main.c splitM.c  quote.c expand.c o_file.c free.c execution.c #  c.c
 
 HEADER = mshell.h
 

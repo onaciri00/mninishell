@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/25 14:27:00 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/26 07:43:53 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+# include<fcntl.h>
+# include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
@@ -69,5 +71,6 @@ void	showerror(char *str);
 void	rem_quote(t_lexer *cmd);
 void	open_file(t_lexer *cmd, t_file *file, t_env *env);
 void    free_2d(char **str);
+void	pipex(t_lexer  *cmd, char **env);
 
 #endif
