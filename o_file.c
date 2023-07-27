@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 17:41:48 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/27 09:54:08 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 	int		fd;
 
 	new = file;
+	fd = -2;
 	cmd->inf = -2;
 	cmd->outf = -2;
 	while (new)
@@ -70,9 +71,15 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 		else if (fd == -1 && new->limeter)
 			printf("PROBLEM IN OPENING HERDOC\n");
 		if (new->type == 0 || new->type == 2)
+		{
+			close(cmd->inf);
 			cmd->inf = fd;
+		}
 		else if (new->type == 3 || new->type == 1)
+		{
+			close(cmd->outf);
 			cmd->outf = fd;
+		}
 		new = new->next;
 	}
 }

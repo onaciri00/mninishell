@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 16:20:03 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/27 09:01:14 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0);
 	}
+	//i = 0;
 	ret = ft_split(str, ' ');
+	//while (ret[i])
+	//	printf("%s\n", ret[i++]); 
 	cmd->cmd = ret;
 	free(str);
 }

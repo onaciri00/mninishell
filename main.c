@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 17:26:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/27 07:28:32 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int main(int ac, char *av[], char *env[])
 		str = readline("minshell: ");
 		if (!str)
 			exit(10);
-		add_history(str);
 		if(str[0])
 		{
+			add_history(str);
 			var = full_env(env);
 			cmd = ft_start(str, var);
 			pipex(cmd, env);
