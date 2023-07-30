@@ -1,0 +1,78 @@
+so first split everthing till you found pipe that will be a comound
+    (incase of pipe inside qouate change theme to unwritable charchter)
+than look for redirction 
+
+exit if piped in should termante the programme
+ ask if you shoud handle ';'
+
+ if > fil1 > fil2 they should noth have the output of ls ame of (infile) cat < <
+ EXPAND in any time was given exept 
+ pipe first last
+
+cat<Makefiel|ls -l
+
+1 - split pipe 
+{
+    cat<$USER
+    ls -l
+}
+
+2-add sapce
+3-expand{
+    cat < onaciri
+    turn it linked list and remove files nodes
+    ls -l
+}
+
+4 - get files
+{
+    remove quotes from files names
+    fill the fucking linked list
+}
+
+remove quotes and get cmd and arguments
+
+1 qouate removed if twice 
+
+
+1 check the first charchter if it is than replace letter ahead 
+2else look  for it than put all charchter ahead -1 position 
+if more come just keep skeping tell you find letter if ended thand put \0 in the last time you find it
+
+"""d""hfd""hfhd""gfhj"""hdf"h"
+"" handklle
+
+herdoc == "limter"-> no expand for $limter and inside it
+
+
+// void	perfect_cmd(char *str, char rem1, char rem2, int id)
+// {
+// 	char	*cp;
+// 	int		i;
+// 	int		size;
+
+// 	i = -1;
+// 	size = 0;
+// 	while (str[++i])
+// 		if(str[i] != 127)
+// 			size++;
+// 	cp = malloc(sizeof(char) * size + 1);
+// 	i = -1;
+// 	size = 0;
+// 	while (str[++i])
+// 	{
+// 		if (str[i] != 127)
+// 		{
+// 			cp[size] = str[i];
+// 			size++;
+// 		}
+// 	}
+// 	cp[size] = '\0';
+// 	size = -1;
+// 	while (cp[++size])
+// 		str[size] = cp[size];
+// 	str[size] = '\0';
+// 	free(cp);
+// }
+
+
