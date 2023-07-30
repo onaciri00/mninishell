@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 15:05:21 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 18:44:25 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,13 @@ void	ft_expand(char **str, t_env *env, int v)
     i = 0;
 	while ((*str)[i])
     {
-        if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95 || (*str)[i + 1] == '$' || (*str)[i + 1] == '"' || (*str)[i + 1] =='\''))
+        if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95 || (*str)[i + 1] == '$' || (*str)[i + 1] == '"' || (*str)[i + 1] =='\'' || (*str)[i] == 64))
 		{
 			if (is_quote(*str, i) != 1 && do_expand(*str , i))
 				i = ft_strmerge(str, i, i + 1, env);
-			else if (v)
-				i = ft_strmerge(str, i, i + 1, env);
 		}
+		if ((*str)[i] == '$' && v)
+			i = ft_strmerge(str, i, i + 1, env);
 		if ((*str)[i])
 			i++;
 	}

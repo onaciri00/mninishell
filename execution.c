@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 15:27:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 18:24:55 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,22 +108,19 @@ char	*ft_path(char *path_cmd, char **env)
 
 void	children(t_lexer *cmd, char **env,  int i)
 {
-	int		id;
 	char	*path;
 	int		fd[2];
 	int o_out = dup(STDOUT_FILENO);
 
 	if (pipe(fd) == -1)
 		(write(1, "ERROR:pipe probleme", 20), exit(1));
-	id = fork();
-	if (id == -1)
+	cmd->id = fork();
+	if (cmd->id == -1)
 		(write(1, "ERROR:fork probleme", 20), exit(1));
-	if (id == 0)
+	if (cmd->id == 0)
 	{
 		close(fd[0]);
-	//	if (cmd->inf == -2 && !first)
-		//	cmd->inf = fd_pipe();
-		 if (cmd->inf >= 0)
+		if (cmd->inf >= 0)
 			dup2(cmd->inf, STDIN_FILENO);
 		if (cmd->outf < 0 && !i)
 			dup2(fd[1], STDOUT_FILENO);
@@ -133,6 +130,8 @@ void	children(t_lexer *cmd, char **env,  int i)
 		}
 		else if (cmd->outf == -2 && i)
 			 dup2(o_out, STDOUT_FILENO);
+		close(o_out);
+		close(fd[1]);
 		path = ft_path(cmd->cmd[0], env);
 		if (execve(path, cmd->cmd, env) == -1)
 			(write(2, "ERROR:execve probleme\n", 23), exit(127));
@@ -140,8 +139,9 @@ void	children(t_lexer *cmd, char **env,  int i)
 	else
 	{
 		close(fd[1]);
+		close(STDIN_FILENO);
 		dup2(fd[0], STDIN_FILENO);
-		waitpid(-1, &i, 0);
+		close(fd[0]);
 	}
 }
 
@@ -149,11 +149,13 @@ void	pipex(t_lexer  *cmd, char **env)
 {
 	int	i;
 	int	j;
+	t_lexer	*lst;
 	int file;
 
 	i = 0;
 	j = 0;
 	file = dup(STDIN_FILENO);
+	lst = cmd;
 	while (cmd)
 	{
 		if (!cmd->next)
@@ -164,6 +166,11 @@ void	pipex(t_lexer  *cmd, char **env)
 		}
 		j++;
 		cmd = cmd->next;
+	}
+	while(lst)
+	{ 
+		waitpid(lst->id, &j, 0);
+		lst = lst->next;
 	}
 	dup2(file, STDIN_FILENO);
 }

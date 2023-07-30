@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 15:24:06 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 18:14:36 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_file
 typedef struct s_lexer
 {
     char	        **cmd;
+    int             id;
     t_file	        *file;
 	t_env			*env;
     int             inf;
