@@ -6,21 +6,39 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 13:32:18 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 15:05:21 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
+char **env_split(char *env)
+{
+	char	**s;
+
+	s = malloc(sizeof(char*) * 2);
+	if (!s)
+		return (NULL);
+	s[0] = ft_substr(env, 0, ft_strchr(env, '=') - env);
+	s[1] = ft_strdup(env + (ft_strchr(env, '=') - env) + 1);
+	return (s);
+}
+
 void	env_new(t_env **var, char *env)
 {
 	t_env	*lst;
 	t_env	*new;
+	char	**str;
 
 	if (!*var)
 	{
-		(*var) = malloc(sizeof(t_env));
-		(*var)->var = env;
+		(*var) = malloc(sizeof (t_env));
+		str = env_split(env);
+		(*var)->key = ft_strdup(str[0]);
+		free(str[0]);
+		(*var)->value = ft_strdup(str[1]);
+		free(str[1]);
+		free(str);
 		(*var)->next = NULL;
 	}
 	else
@@ -30,7 +48,12 @@ void	env_new(t_env **var, char *env)
 			lst = lst->next;
 		new = malloc(sizeof(t_env));
 		new->next = NULL;
-		new->var = env;
+		str = env_split(env);
+		new->key = ft_strdup(str[0]);
+		free(str[0]);
+		new->value = ft_strdup(str[1]);
+		free(str[1]);
+		free(str);
 		lst->next = new;
 	}
 }
@@ -49,7 +72,6 @@ t_env	*full_env(char **env)
 	return (var);
 }
 
-
 char *ft_findvar(char *str, int start, int end, t_env *env)
 {
 	char	**cp;
@@ -59,16 +81,13 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 	if (!env)
 		return (ft_strdup(""));	
 	tmp = ft_substr(str, start, end - start);
-
 	while (env)
 	{
 		i = -1;
-		while (env->var[++i] && env->var[i] != '=');
-
-		if (!ft_strncmp(tmp, env->var, ft_strlen(tmp)) && i == ft_strlen(tmp))
+		if (!ft_strncmp(tmp, env->key, ft_strlen(tmp)) && ft_strlen(env->key) == ft_strlen(tmp))
 		{
 			free(tmp);
-			tmp = ft_substr(env->var, i + 1, ft_strlen(env->var) - ft_strlen(tmp));
+			tmp = ft_substr(env->value, 0, ft_strlen(env->value));
 			if (is_quote(str, start) == 2)
 				return (tmp);
 			cp = ft_split(tmp, ' ');

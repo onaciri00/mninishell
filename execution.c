@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 14:01:31 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 15:27:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ char	*ft_path(char *path_cmd, char **env)
 		sub_path = ft_strjoinp(path[i], "/");
 		cmd1 = ft_strjoinp(sub_path, path_cmd);
 	}
-	printf("			%s %s\n" ,cmd1, path_cmd);
 	return (free(sub_path), cmd1);
 }
 
@@ -142,6 +141,7 @@ void	children(t_lexer *cmd, char **env,  int i)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
+		waitpid(-1, &i, 0);
 	}
 }
 
@@ -158,13 +158,12 @@ void	pipex(t_lexer  *cmd, char **env)
 	{
 		if (!cmd->next)
 			i = 1;
-		if (cmd->inf != -1 || cmd->cmd || cmd->cmd[0][0])
+		if (cmd->inf != -1 && cmd->cmd && cmd->cmd[0][0])
 		{	
 			children(cmd, env,  i);
 		}
 		j++;
 		cmd = cmd->next;
 	}
-		wait(0);
 	dup2(file, STDIN_FILENO);
 }

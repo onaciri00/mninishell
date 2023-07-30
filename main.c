@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 13:33:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 15:08:23 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,11 @@ int main(int ac, char *av[], char *env[])
 		{
 			add_history(str);
 			cmd = ft_start(&str, var);
-			printf("str == %s\n", cmd->cmd[0]);
 			pipex(cmd, env);
 			free_all(cmd);
 		}
-		//if (str)
 		free(str);
-		system("leaks minishell");
+	//	system("leaks minishell");
 		// while (cmd)
 		// {
 		//  	i = -1;

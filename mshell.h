@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 13:32:42 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 15:24:06 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@
 #include <readline/history.h>
 #include "libft/libft.h"
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 typedef struct s_env
 {
-	char			*var;
+	char			*key;
+    char            *value;
 	struct s_env	*next;
 }t_env;
 
