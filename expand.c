@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/28 19:33:14 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 13:32:18 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	do_expand(char *str, int i)
 	return (1);
 }
 
-char   *ft_expand(char **str, t_env *env, int v)
+void	ft_expand(char **str, t_env *env, int v)
 {
     int i;
 
@@ -139,5 +139,4 @@ char   *ft_expand(char **str, t_env *env, int v)
 		if ((*str)[i])
 			i++;
 	}
-	return (*str);
 }

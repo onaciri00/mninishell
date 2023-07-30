@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/27 09:01:14 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 13:33:06 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,12 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
 			mod_file(str + i , &cmd->file, 0);
 	}
-	//i = 0;
-	ret = ft_split(str, ' ');
-	//while (ret[i])
-	//	printf("%s\n", ret[i++]); 
+	ret = ft_split(str, ' ');; 
 	cmd->cmd = ret;
 	free(str);
 }
 
-t_lexer *ft_start(char *str, t_env *var)
+t_lexer *ft_start(char **str, t_env *var)
 {
 	int		i;
 	int		size;
@@ -107,10 +104,10 @@ t_lexer *ft_start(char *str, t_env *var)
 	t_lexer	*cmd;
 	t_lexer	*lst;
 
-	if (str && check_err(str))
+	if (*str && check_err(*str))
 		return (NULL);
-	str = ft_expand(&str, var, 0);
-	raw = ft_split(str, '|');
+	ft_expand(str, var, 0);
+	raw = ft_split(*str, '|');
 	i = 0;
 	size = len_2d(raw);
 	cmd = creat_cmd(size);
@@ -124,5 +121,6 @@ t_lexer *ft_start(char *str, t_env *var)
 		cmd = cmd->next;
 		i++;
 	}
+	free(raw);
 	return (lst);
 }

@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 10:05:07 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 14:01:31 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ char	*ft_strjoinp(char const *s1, char const *s2)
 	return (str);
 }
 
+void	rm_slash(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+			str[i] = str[i + 1];
+	str[i] = '\0';
+}
+
 char	*ft_path(char *path_cmd, char **env)
 {
 	char	**path;
@@ -76,7 +86,8 @@ char	*ft_path(char *path_cmd, char **env)
 		return (path_cmd);
 	if (path_cmd[0] == '/')
 		return (NULL);
-	printf("			%s \n" /*,cmd1*/, path_cmd);
+	if (path_cmd[0] == '\\')
+		rm_slash(path_cmd);
 	while (env[i] && !ft_strnstr(env[i], "PATH=", ft_strlen("PATH=")))
 		i++;
 	if (!env[i])
@@ -92,10 +103,11 @@ char	*ft_path(char *path_cmd, char **env)
 		sub_path = ft_strjoinp(path[i], "/");
 		cmd1 = ft_strjoinp(sub_path, path_cmd);
 	}
+	printf("			%s %s\n" ,cmd1, path_cmd);
 	return (free(sub_path), cmd1);
 }
 
-void	children(t_lexer *cmd, char **env, int first, int i)
+void	children(t_lexer *cmd, char **env,  int i)
 {
 	int		id;
 	char	*path;
@@ -110,9 +122,9 @@ void	children(t_lexer *cmd, char **env, int first, int i)
 	if (id == 0)
 	{
 		close(fd[0]);
-		if (cmd->inf == -2 && !first)
-			cmd->inf = fd_pipe();
-		else if (cmd->inf >= 0)
+	//	if (cmd->inf == -2 && !first)
+		//	cmd->inf = fd_pipe();
+		 if (cmd->inf >= 0)
 			dup2(cmd->inf, STDIN_FILENO);
 		if (cmd->outf < 0 && !i)
 			dup2(fd[1], STDOUT_FILENO);
@@ -129,7 +141,6 @@ void	children(t_lexer *cmd, char **env, int first, int i)
 	else
 	{
 		close(fd[1]);
-		wait(0);
 		dup2(fd[0], STDIN_FILENO);
 	}
 }
@@ -149,11 +160,11 @@ void	pipex(t_lexer  *cmd, char **env)
 			i = 1;
 		if (cmd->inf != -1 || cmd->cmd || cmd->cmd[0][0])
 		{	
-			children(cmd, env, cmd->outf, i);
-			close(cmd->inf);
+			children(cmd, env,  i);
 		}
 		j++;
 		cmd = cmd->next;
 	}
+		wait(0);
 	dup2(file, STDIN_FILENO);
 }
