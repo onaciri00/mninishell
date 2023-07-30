@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/26 17:35:50 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/30 10:05:07 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,35 @@ char	*ft_strjoinp(char const *s1, char const *s2)
 
 char	*ft_path(char *path_cmd, char **env)
 {
-	char	**dev;
 	char	**path;
 	char	*cmd1;
 	char	*sub_path;
 	int		i;
 
 	i = 0;
+	if (!path_cmd)
+		return (NULL);
 	if (access(path_cmd, X_OK) == 0)
 		return (path_cmd);
+	if (path_cmd[0] == '/')
+		return (NULL);
+	printf("			%s \n" /*,cmd1*/, path_cmd);
 	while (env[i] && !ft_strnstr(env[i], "PATH=", ft_strlen("PATH=")))
 		i++;
 	if (!env[i])
 		showerror("the path is gone");
-	dev = ft_split(path_cmd, ' ');
 	path = ft_split(env[i], ':');
 	i = -1;
 	sub_path = ft_strjoinp(path[0], "/");
-	cmd1 = ft_strjoinp(sub_path, dev[0]);
+	cmd1 = ft_strjoinp(sub_path, path_cmd);
 	while ((access(cmd1, X_OK) == -1) && path[++i] != NULL)
 	{
 		free(sub_path);
 		free(cmd1);
 		sub_path = ft_strjoinp(path[i], "/");
-		cmd1 = ft_strjoinp(sub_path, dev[0]);
+		cmd1 = ft_strjoinp(sub_path, path_cmd);
 	}
-	return (ft_free(dev, path), free(sub_path), cmd1);
+	return (free(sub_path), cmd1);
 }
 
 void	children(t_lexer *cmd, char **env, int first, int i)
@@ -127,14 +130,7 @@ void	children(t_lexer *cmd, char **env, int first, int i)
 	{
 		close(fd[1]);
 		wait(0);
-		//printf("dol\n");
-		if (cmd->outf >= 0)
-		{
-			dup2(cmd->outf, STDIN_FILENO);
-			close(fd[0]);
-		}
-		else if (cmd->outf < 0) 
-			dup2(fd[0], STDIN_FILENO);
+		dup2(fd[0], STDIN_FILENO);
 	}
 }
 
@@ -151,7 +147,7 @@ void	pipex(t_lexer  *cmd, char **env)
 	{
 		if (!cmd->next)
 			i = 1;
-		if (cmd->inf != -1)
+		if (cmd->inf != -1 || cmd->cmd || cmd->cmd[0][0])
 		{	
 			children(cmd, env, cmd->outf, i);
 			close(cmd->inf);
