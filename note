@@ -76,3 +76,39 @@ herdoc == "limter"-> no expand for $limter and inside it
 // }
 
 
+// void	env_new(t_env **var, char *env)
+// {
+// 	t_env	*lst;
+// 	t_env	*new;
+
+// 	if (!*var)
+// 	{
+// 		(*var) = malloc(sizeof(t_env));
+// 		(*var)->var = env;
+// 		(*var)->next = NULL;
+// 	}
+// 	else
+// 	{
+// 		lst = (*var);
+// 		while (lst->next)
+// 			lst = lst->next;
+// 		new = malloc(sizeof(t_env));
+// 		new->next = NULL;
+// 		new->var = env;
+// 		lst->next = new;
+// 	}
+// }
+
+// t_env	*full_env(char **env)
+// {
+// 	t_env	*var;
+// 	int		i;
+
+// 	i = -1;
+// 	var = NULL;
+// 	while (env[++i])
+// 	{
+// 		env_new(&var, env[i]);
+// 	}
+// 	return (var);
+// }

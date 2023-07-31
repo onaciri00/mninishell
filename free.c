@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 08:11:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 13:10:16 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 07:34:11 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	free_all(t_lexer *cmd)
 			free(lst->file);
 		lst = lst->next;
 	}
-	while (cmd->file)
+	while (cmd && cmd->file)
 	{
 		lst = cmd->file->next;
 		free(cmd->file);

@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 18:40:08 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 07:40:23 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 		else if (new->limeter)
 			fd = open_her(new->limeter, file->lim_con, env);
 		if (fd == -1 && new->file)
-			printf("PROBLEM IN OPENING %s\n", new->file);
+			printf(" %s: No such file or directory\n", new->file);
 		else if (fd == -1 && new->limeter)
 			printf("PROBLEM IN OPENING HERDOC\n");
 		if (new->type == 0 || new->type == 2)

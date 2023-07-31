@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 18:24:55 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 09:21:06 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	children(t_lexer *cmd, char **env,  int i)
 		close(fd[1]);
 		path = ft_path(cmd->cmd[0], env);
 		if (execve(path, cmd->cmd, env) == -1)
-			(write(2, "ERROR:execve probleme\n", 23), exit(127));
+			(write(2, "command not found\n", 19), exit(127));
 	}
 	else
 	{
@@ -148,29 +148,28 @@ void	children(t_lexer *cmd, char **env,  int i)
 void	pipex(t_lexer  *cmd, char **env)
 {
 	int	i;
-	int	j;
 	t_lexer	*lst;
 	int file;
-
+	int status;
 	i = 0;
-	j = 0;
 	file = dup(STDIN_FILENO);
 	lst = cmd;
 	while (cmd)
 	{
 		if (!cmd->next)
 			i = 1;
-		if (cmd->inf != -1 && cmd->cmd && cmd->cmd[0][0])
-		{	
+		if (cmd->inf != -1)
 			children(cmd, env,  i);
-		}
-		j++;
 		cmd = cmd->next;
 	}
 	while(lst)
 	{ 
-		waitpid(lst->id, &j, 0);
+		waitpid(lst->id, &status, 0);
 		lst = lst->next;
 	}
+	if (WIFEXITED(status))
+		exit_s = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		exit_s = WTERMSIG(status);
 	dup2(file, STDIN_FILENO);
 }

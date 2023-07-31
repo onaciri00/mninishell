@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 18:14:36 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 07:37:38 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+
+int exit_s;
 
 typedef struct s_env
 {

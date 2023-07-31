@@ -6,70 +6,35 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 18:44:25 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 09:58:12 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
-char **env_split(char *env)
+int	find_quest(char **str, int i, int sing)
 {
-	char	**s;
-
-	s = malloc(sizeof(char*) * 2);
-	if (!s)
-		return (NULL);
-	s[0] = ft_substr(env, 0, ft_strchr(env, '=') - env);
-	s[1] = ft_strdup(env + (ft_strchr(env, '=') - env) + 1);
-	return (s);
-}
-
-void	env_new(t_env **var, char *env)
-{
-	t_env	*lst;
-	t_env	*new;
-	char	**str;
-
-	if (!*var)
-	{
-		(*var) = malloc(sizeof (t_env));
-		str = env_split(env);
-		(*var)->key = ft_strdup(str[0]);
-		free(str[0]);
-		(*var)->value = ft_strdup(str[1]);
-		free(str[1]);
-		free(str);
-		(*var)->next = NULL;
-	}
+	char *num;
+	char *tmp;
+	char *end;
+	int	len;
+	
+	if (!sing)
+		num  = ft_itoa(exit_s);
 	else
 	{
-		lst = (*var);
-		while (lst->next)
-			lst = lst->next;
-		new = malloc(sizeof(t_env));
-		new->next = NULL;
-		str = env_split(env);
-		new->key = ft_strdup(str[0]);
-		free(str[0]);
-		new->value = ft_strdup(str[1]);
-		free(str[1]);
-		free(str);
-		lst->next = new;
+		num = malloc(2);
+		num[0] = '0';
+		num[1] = '\0';
 	}
-}
-
-t_env	*full_env(char **env)
-{
-	t_env	*var;
-	int		i;
-
-	i = -1;
-	var = NULL;
-	while (env[++i])
-	{
-		env_new(&var, env[i]);
-	}
-	return (var);
+	tmp = ft_substr(*str, 0, i);
+	end = ft_substr(*str, i + 2, ft_strlen(*str) - i + 2);
+	free(*str);
+	*str = ft_strjoin(tmp, num);
+	tmp = ft_strjoin(*str, end);
+	*str = tmp;
+	len = ft_strlen(num);
+	return (len);
 }
 
 char *ft_findvar(char *str, int start, int end, t_env *env)
@@ -108,9 +73,9 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$' || ft_isdigit((*str)[j]))
+		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$' || ft_isdigit((*str)[j]) || (*str)[i] == '@')
 			break;
-	if ((ft_isdigit((*str)[j]) || (*str)[i] == '$') && (*str)[i])
+	if ((ft_isdigit((*str)[j]) || (*str)[i] == '$' ||  (*str)[i] == '@') && (*str)[i])
 		i++;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
@@ -144,17 +109,22 @@ int	do_expand(char *str, int i)
 void	ft_expand(char **str, t_env *env, int v)
 {
     int i;
+	int	sing;
 
     i = 0;
+	sing = 0;
 	while ((*str)[i])
     {
-        if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95 || (*str)[i + 1] == '$' || (*str)[i + 1] == '"' || (*str)[i + 1] =='\'' || (*str)[i] == 64))
+        if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95 || (*str)[i + 1] == '$' || (*str)[i + 1] == '"' || (*str)[i + 1] =='\'' || (*str)[i + 1] == '@'))
 		{
-			if (is_quote(*str, i) != 1 && do_expand(*str , i))
+			if (is_quote(*str, i) != 1 && do_expand(*str , i) && v && !(is_quote(*str, i) == 2 && ((*str)[i + 1] == '"' || (*str)[i + 1] == '\'' )))
 				i = ft_strmerge(str, i, i + 1, env);
 		}
-		if ((*str)[i] == '$' && v)
-			i = ft_strmerge(str, i, i + 1, env);
+		else if ((*str)[i] == '$' && (*str)[i + 1] == '?' && v)
+		{
+			i += find_quest(str, i,sing);
+			sing++;
+		}
 		if ((*str)[i])
 			i++;
 	}

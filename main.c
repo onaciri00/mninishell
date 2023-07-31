@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/30 15:08:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/07/31 07:38:16 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int main(int ac, char *av[], char *env[])
 	if (ac != 1 || !ft_strnstr(av[0], "./minishell", 11))
 		return (1);
 	var = full_env(env);
+	exit_s = 0;
 	while (1)
 	{
 		str = readline("minshell: ");
