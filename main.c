@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/31 07:38:16 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/01 08:19:42 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main(int ac, char *av[], char *env[])
 	{
 		str = readline("minshell: ");
 		if (!str)
-			exit(10);
+			exit(0);
 		if(str[0])
 		{
 			add_history(str);

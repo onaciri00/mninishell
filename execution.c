@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/31 09:21:06 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/01 08:29:07 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,7 @@ void	children(t_lexer *cmd, char **env,  int i)
 		if (cmd->outf < 0 && !i)
 			dup2(fd[1], STDOUT_FILENO);
 		else if (cmd->outf >= 0)
-		{
 			dup2(cmd->outf, STDOUT_FILENO);
-		}
 		else if (cmd->outf == -2 && i)
 			 dup2(o_out, STDOUT_FILENO);
 		close(o_out);
@@ -151,6 +149,7 @@ void	pipex(t_lexer  *cmd, char **env)
 	t_lexer	*lst;
 	int file;
 	int status;
+
 	i = 0;
 	file = dup(STDIN_FILENO);
 	lst = cmd;
@@ -158,7 +157,7 @@ void	pipex(t_lexer  *cmd, char **env)
 	{
 		if (!cmd->next)
 			i = 1;
-		if (cmd->inf != -1)
+		if (cmd->inf != -1 && cmd->cmd && cmd->cmd[0])
 			children(cmd, env,  i);
 		cmd = cmd->next;
 	}
