@@ -1,0 +1,5 @@
+export KEY= VALUE
+
+export KEY =VALUE
+
+export t=b1 t=b2
