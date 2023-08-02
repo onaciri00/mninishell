@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/01 08:29:07 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/02 13:09:21 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,34 +141,4 @@ void	children(t_lexer *cmd, char **env,  int i)
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}
-}
-
-void	pipex(t_lexer  *cmd, char **env)
-{
-	int	i;
-	t_lexer	*lst;
-	int file;
-	int status;
-
-	i = 0;
-	file = dup(STDIN_FILENO);
-	lst = cmd;
-	while (cmd)
-	{
-		if (!cmd->next)
-			i = 1;
-		if (cmd->inf != -1 && cmd->cmd && cmd->cmd[0])
-			children(cmd, env,  i);
-		cmd = cmd->next;
-	}
-	while(lst)
-	{ 
-		waitpid(lst->id, &status, 0);
-		lst = lst->next;
-	}
-	if (WIFEXITED(status))
-		exit_s = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		exit_s = WTERMSIG(status);
-	dup2(file, STDIN_FILENO);
 }

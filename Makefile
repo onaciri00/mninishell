@@ -4,7 +4,8 @@ HEADER = mshell.h
 
 HEADER = mshell.h
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -lreadline 
+#-fsanitize=address -g3
 
 NAME = minishell
 
@@ -13,7 +14,7 @@ LIB = -Llibft -lft
 all: $(NAME) runlibft
 
 $(NAME): $(SRC) $(HEADER)
-	cc $(CFLAGS) $(SRC) $(LIB) -lreadline -o $(NAME)
+	cc $(CFLAGS) $(SRC) $(LIB)  -o $(NAME) -L /Users/onaciri/Desktop/readline-8.2
 
 runlibft:
 	make -C libft

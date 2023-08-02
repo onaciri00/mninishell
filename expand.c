@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/01 07:53:52 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/01 14:11:38 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	find_quest(char **str, int i, int sing)
 	char *end;
 	int	len;
 	
+	if (exit_s == 2)
+		exit_s = 130;
 	if (!sing)
 		num  = ft_itoa(exit_s);
 	else
