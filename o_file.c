@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/31 07:40:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 07:31:31 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ int	open_her(char *str, int v, t_env *var)
 	while (1)
 	{
 		lim = readline(">");
-		if (!lim || (ft_strlen(lim) == ft_strlen(str) && !ft_strncmp(lim, str, ft_strlen(lim))))
-			break;
+		if (!lim || (ft_strlen(lim) == ft_strlen(str)
+				&& !ft_strncmp(lim, str, ft_strlen(lim))))
+			break ;
 		if (!v)
 			ft_expand(&lim, var, 1);
 		write(fd[1], lim, ft_strlen(lim));
@@ -31,17 +32,21 @@ int	open_her(char *str, int v, t_env *var)
 		free(lim);
 	}
 	close(fd[1]);
-	return(free(lim), fd[0]);
+	return (free(lim), fd[0]);
 }
 
-int	fd_pipe(void)
+void	set_files(t_lexer *cmd, t_file *new, int fd)
 {
-	int	fd[2];
-
-	if (pipe(fd) == -1)
-		printf("error \n");
-		close(fd[1]);
-		return (fd[0]);
+	if (new->type == 0 || new->type == 2)
+	{
+		close(cmd->inf);
+		cmd->inf = fd;
+	}
+	else if (new->type == 3 || new->type == 1)
+	{
+		close(cmd->outf);
+		cmd->outf = fd;
+	}
 }
 
 void	open_file(t_lexer *cmd, t_file *file, t_env *env)
@@ -51,8 +56,6 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 
 	new = file;
 	fd = -2;
-	cmd->inf = -2;
-	cmd->outf = -2;
 	while (new)
 	{
 		if (new->file)
@@ -60,9 +63,9 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			if (new->type == 0)
 				fd = open(new->file, O_RDONLY);
 			else if (new->type == 1)
-				fd = open(new->file, O_CREAT | O_WRONLY |O_TRUNC, 0666);
+				fd = open(new->file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 			else if (new->type == 3)
-				fd = open(new->file, O_CREAT | O_WRONLY |  O_APPEND, 0666);
+				fd = open(new->file, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		}
 		else if (new->limeter)
 			fd = open_her(new->limeter, file->lim_con, env);
@@ -70,16 +73,7 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 			printf(" %s: No such file or directory\n", new->file);
 		else if (fd == -1 && new->limeter)
 			printf("PROBLEM IN OPENING HERDOC\n");
-		if (new->type == 0 || new->type == 2)
-		{
-			close(cmd->inf);
-			cmd->inf = fd;
-		}
-		else if (new->type == 3 || new->type == 1)
-		{
-			close(cmd->outf);
-			cmd->outf = fd;
-		}
+		set_files(cmd, new, fd);
 		new = new->next;
 	}
 }

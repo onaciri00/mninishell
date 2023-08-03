@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:16:40 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/24 07:37:28 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 07:24:42 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ void	perfect_cmd(char *str)
 	str[j] = '\0';
 }
 
-
-void    deqou_cmd(char *str, int sqo, int dqo, int i)
+void	deqou_cmd(char *str, int sqo, int dqo, int i)
 {
 	char	quote;
 
@@ -105,7 +104,7 @@ int	is_quote(char *str, int i)
 
 	j = 0;
 	sqo = 0;
-	dqo =0;
+	dqo = 0;
 	while (str[j] && i >= j)
 	{
 		if (str[j] == '"' && !sqo)

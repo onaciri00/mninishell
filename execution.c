@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/02 13:09:21 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 06:13:37 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,21 @@ void	children(t_lexer *cmd, char **env,  int i)
 		close(o_out);
 		close(fd[1]);
 		path = ft_path(cmd->cmd[0], env);
-		if (execve(path, cmd->cmd, env) == -1)
+		if (!is_built(cmd->cmd[0]))
+		{
+			if (execve(path, cmd->cmd, env) == -1)
 			(write(2, "command not found\n", 19), exit(127));
+		}
+		else
+		{
+			exit_s = execute_builtins(cmd);
+			exit(0);
+		}
 	}
 	else
 	{
 		close(fd[1]);
-		close(STDIN_FILENO);
+		//close(STDIN_FILENO);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}

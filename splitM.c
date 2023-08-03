@@ -6,10 +6,9 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/01 08:24:55 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 07:52:39 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "mshell.h"
 
@@ -19,13 +18,13 @@ void	set_type(int id, t_file **file)
 		(*file)->type = 0;
 	else if (id == 1)
 		(*file)->type = 1;
-	else if(id == 2)
+	else if (id == 2)
 		(*file)->type = 2;
 	else if (id == 3)
 		(*file)->type = 3;
 }
 
-void clean_cmd(char *str,int j)
+void	clean_cmd(char *str, int j)
 {
 	int	i;
 
@@ -52,30 +51,28 @@ int	mod_file(char *str, t_file **file, int id)
 	}
 	while (str[++i] && str[i] == ' ' && !syt_val(str + i))
 		j++;
-	while (str[++i] && !syt_val(str + i) && str[i] != ' ');
-
+	while (str[i] && !syt_val(str + i) && str[i] != ' ')
+		i++;
 	lst = new_file(file);
 	if (id == 2)
 		lst->limeter = ft_substr((const char *)str, j + 1, i - j - 1);
 	else if (id != 2)
-		lst->file = ft_substr((const char *)str, j+ 1, i - j - 1);
+		lst->file = ft_substr((const char *)str, j + 1, i - j - 1);
 	set_type(id, &lst);
 	clean_cmd(str, i);
 	return (1);
 }
 
-
 void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 {
 	int		i;
-	char	**ret;
 
 	i = -1;
 	while (str[++i])
 	{
 		if (!sqo && str[i] == '"')
 			dqo++;
-		if (!dqo && str[i] =='\'')
+		if (!dqo && str[i] == '\'')
 			sqo++;
 		if (sqo == 2 || dqo == 2)
 		{
@@ -85,40 +82,33 @@ void	check_arg(char *str, t_lexer *cmd, int sqo, int dqo)
 		if (syt_val(str + i) == 2 && !dqo && !sqo)
 			i += mod_file(str + i, &cmd->file, 2);
 		else if (syt_val(str + i) == 3 && !dqo && !sqo)
-			i += mod_file(str +i, &cmd->file, 3);
-		else if (syt_val(str +i) == 4 && !dqo && !sqo)
+			i += mod_file(str + i, &cmd->file, 3);
+		else if (syt_val(str + i) == 4 && !dqo && !sqo)
 			mod_file(str + i, &cmd->file, 1);
 		else if (syt_val(str + i) == 5 && !dqo && !sqo)
-			mod_file(str + i , &cmd->file, 0);
+			mod_file(str + i, &cmd->file, 0);
 	}
-	ret = ft_split(str, ' ');; 
-	if (!ret)
-		return ;
-	cmd->cmd = ret;
-	free(str);
+	cmd->cmd = extra_check(str);
 }
 
-t_lexer *ft_start(char **str, t_env *var)
+t_lexer	*ft_start(char **str, t_env *var, int i)
 {
-	int		i;
 	int		size;
-	char 	**raw;
+	char	**raw;
 	t_lexer	*cmd;
 	t_lexer	*lst;
 
-	if (*str && check_err(*str))//today
+	if (*str && check_err(*str))
 		return (NULL);
-	ft_expand(str, var, 2);
+	ft_expand(str, var, 2, 0);
 	raw = ft_split(*str, '|');
 	if (!raw)
-		return (NULL); 
-	i = 0;
+		return (NULL);
 	size = len_2d(raw);
 	cmd = creat_cmd(size);
 	lst = cmd;
 	while (raw[i])
-	{
-		
+	{	
 		check_arg(raw[i], cmd, 0, 0);
 		rem_quote(cmd);
 		open_file(cmd, cmd->file, var);

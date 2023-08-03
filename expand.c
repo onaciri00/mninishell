@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/01 14:11:38 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 07:55:10 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	find_quest(char **str, int i, int sing)
 {
-	char *num;
-	char *tmp;
-	char *end;
-	int	len;
-	
+	char	*num;
+	char	*tmp;
+	char	*end;
+	int		len;
+
 	if (exit_s == 2)
 		exit_s = 130;
 	if (!sing)
-		num  = ft_itoa(exit_s);
+		num = ft_itoa(exit_s);
 	else
 	{
 		num = malloc(2);
@@ -39,19 +39,20 @@ int	find_quest(char **str, int i, int sing)
 	return (len);
 }
 
-char *ft_findvar(char *str, int start, int end, t_env *env)
+char	*ft_findvar(char *str, int start, int end, t_env *env)
 {
-	char	**cp;
+	char		**cp;
+	char		*tmp;
 	size_t		i;
-	char	*tmp;
 
 	if (!env)
-		return (ft_strdup(""));	
+		return (ft_strdup(""));
 	tmp = ft_substr(str, start, end - start);
 	while (env)
 	{
 		i = -1;
-		if (!ft_strncmp(tmp, env->key, ft_strlen(tmp)) && ft_strlen(env->key) == ft_strlen(tmp))
+		if (!ft_strncmp(tmp, env->key, ft_strlen(tmp))
+			&& ft_strlen(env->key) == ft_strlen(tmp))
 		{
 			free(tmp);
 			tmp = ft_substr(env->value, 0, ft_strlen(env->value));
@@ -60,7 +61,7 @@ char *ft_findvar(char *str, int start, int end, t_env *env)
 			cp = ft_split(tmp, ' ');
 			free(tmp);
 			tmp = ft_strdup(cp[0]);
-			return(free_2d(cp), tmp);
+			return (free_2d(cp), tmp);
 		}
 		env = env->next;
 	}
@@ -75,9 +76,10 @@ int	ft_strmerge(char **str, int i, int j, t_env *env)
 	int		z;
 
 	while ((*str)[++i])
-		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95) || (*str)[i] == '$' || ft_isdigit((*str)[j]) || (*str)[i] == '@')
-			break;
-	if ((ft_isdigit((*str)[j]) ||  (*str)[i] == '@') && (*str)[i])
+		if ((!ft_isalnum((*str)[i]) && (*str)[i] != 95)
+			|| (*str)[i] == '$' || ft_isdigit((*str)[j]) || (*str)[i] == '@')
+			break ;
+	if ((ft_isdigit((*str)[j]) || (*str)[i] == '@') && (*str)[i])
 		i++;
 	str_bef = ft_substr(*str, 0, j - 1);
 	str_aft = ft_substr(*str, i, ft_strlen(*str) - j);
@@ -96,7 +98,7 @@ int	do_expand(char *str, int i)
 {	
 	while (--i >= 0 && str[i])
 		if (str[i] != ' ')
-			break;
+			break ;
 	if (i <= 0)
 	{
 		if (syt_val(str) == 2)
@@ -108,25 +110,28 @@ int	do_expand(char *str, int i)
 	return (1);
 }
 
-void	ft_expand(char **str, t_env *env, int v)
+void	ft_expand(char **str, t_env *env, int v, int i)
 {
-    int i;
 	int	sing;
 
-    i = 0;
 	sing = 0;
 	while ((*str)[i])
-    {
-        if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95 || (*str)[i + 1] == '"' || (*str)[i + 1] =='\'' || (*str)[i + 1] == '@'))
+	{
+		if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95
+			|| (*str)[i + 1] == '"' || (*str)[i + 1] == '\''
+			|| (*str)[i + 1] == '@'))
 		{
-			if (is_quote(*str, i) != 1 && do_expand(*str , i) && !(is_quote(*str, i) == 2 && ((*str)[i + 1] == '"' || (*str)[i + 1] == '\'' )) && v == 2)
+			if (is_quote(*str, i) != 1 && do_expand(*str, i)
+				&& !(is_quote(*str, i) == 2
+					&& ((*str)[i + 1] == '"'
+					|| (*str)[i + 1] == '\'' )) && v == 2)
 				i = ft_strmerge(str, i, i + 1, env);
 		}
 		else if ((*str)[i] == '$' && v == 1 && ft_isalnum((*str)[i + 1]))
 			i = ft_strmerge(str, i, i + 1, env);
 		else if ((*str)[i] == '$' && (*str)[i + 1] == '?' && v)
 		{
-			i += find_quest(str, i,sing);
+			i += find_quest(str, i, sing);
 			sing++;
 		}
 		if ((*str)[i])

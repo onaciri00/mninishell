@@ -6,22 +6,42 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 07:43:30 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/31 07:43:50 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 08:02:33 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
 
-char **env_split(char *env)
+char	**env_split(char *env)
 {
 	char	**s;
 
-	s = malloc(sizeof(char*) * 2);
+	s = malloc(sizeof(char *) * 2);
 	if (!s)
 		return (NULL);
 	s[0] = ft_substr(env, 0, ft_strchr(env, '=') - env);
 	s[1] = ft_strdup(env + (ft_strchr(env, '=') - env) + 1);
 	return (s);
+}
+
+void	add_env(t_env **var, char **env)
+{
+	t_env	*lst;
+	t_env	*new;
+	char	**str;
+
+	lst = (*var);
+	while (lst->next)
+	lst = lst->next;
+	new = malloc(sizeof(t_env));
+	new->next = NULL;
+	str = env_split(env);
+	new->key = ft_strdup(str[0]);
+	free(str[0]);
+	new->value = ft_strdup(str[1]);
+	free(str[1]);
+	free(str);
+	lst->next = new;
 }
 
 void	env_new(t_env **var, char *env)
@@ -42,20 +62,7 @@ void	env_new(t_env **var, char *env)
 		(*var)->next = NULL;
 	}
 	else
-	{
-		lst = (*var);
-		while (lst->next)
-			lst = lst->next;
-		new = malloc(sizeof(t_env));
-		new->next = NULL;
-		str = env_split(env);
-		new->key = ft_strdup(str[0]);
-		free(str[0]);
-		new->value = ft_strdup(str[1]);
-		free(str[1]);
-		free(str);
-		lst->next = new;
-	}
+		add_env();
 }
 
 t_env	*full_env(char **env)

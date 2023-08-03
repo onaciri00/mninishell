@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 08:24:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/22 15:53:45 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 07:58:03 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ int	file_size(t_file *file)
 		file = file->next;
 		i++;
 	}
-	return (i); 
+	return (i);
 }
 
-
-t_file	*new_file(t_file  **file)
+t_file	*new_file(t_file **file)
 {
 	t_file	*lst;
 	t_file	*new;
@@ -63,27 +62,29 @@ t_file	*new_file(t_file  **file)
 	}
 }
 
-int len_2d(char **str)
+int	len_2d(char **str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (!str)
+	i = 0;
+	if (!str)
 		return (0);
 	while (str[i])
-        i++;
-    return (i);
+		i++;
+	return (i);
 }
 
-t_lexer *creat_cmd(int size)
+t_lexer	*creat_cmd(int size)
 {
-	t_lexer *cmd;
-	t_lexer *lst;
+	t_lexer	*cmd;
+	t_lexer	*lst;
 
 	if (!size)
 		return (NULL);
 	cmd = malloc(sizeof(t_lexer));
 	cmd->file = NULL;
+	cmd->inf = -2;
+	cmd->outf = -2;
 	lst = cmd;
 	while (--size)
 	{
