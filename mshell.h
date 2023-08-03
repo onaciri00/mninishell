@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 08:53:30 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 14:28:26 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,6 @@ void    pre_exe(t_lexer  *cmd, char **env);
 void	children(t_lexer *cmd, char **env,  int i, int o_out);
 int     is_built(char *str);
 char    **extra_check(char *str);
+char    *ft_strextra(char **str);
 
 #endif

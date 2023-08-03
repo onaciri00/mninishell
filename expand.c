@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 07:55:10 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 15:38:24 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_findvar(char *str, int start, int end, t_env *env)
 				return (tmp);
 			cp = ft_split(tmp, ' ');
 			free(tmp);
-			tmp = ft_strdup(cp[0]);
+			tmp = ft_strextra(cp);
 			return (free_2d(cp), tmp);
 		}
 		env = env->next;
