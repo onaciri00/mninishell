@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 07:43:30 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 08:02:33 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 08:07:28 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**env_split(char *env)
 	return (s);
 }
 
-void	add_env(t_env **var, char **env)
+void	add_env(t_env **var, char *env)
 {
 	t_env	*lst;
 	t_env	*new;
@@ -46,8 +46,6 @@ void	add_env(t_env **var, char **env)
 
 void	env_new(t_env **var, char *env)
 {
-	t_env	*lst;
-	t_env	*new;
 	char	**str;
 
 	if (!*var)
@@ -62,7 +60,7 @@ void	env_new(t_env **var, char *env)
 		(*var)->next = NULL;
 	}
 	else
-		add_env();
+		add_env(var, env);
 }
 
 t_env	*full_env(char **env)

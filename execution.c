@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 06:13:37 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 12:04:23 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,46 +106,56 @@ char	*ft_path(char *path_cmd, char **env)
 	return (free(sub_path), cmd1);
 }
 
-void	children(t_lexer *cmd, char **env,  int i)
+void	children(t_lexer *cmd, char **env,  int i, int o_out)
 {
 	char	*path;
 	int		fd[2];
-	int o_out = dup(STDOUT_FILENO);
 
 	if (pipe(fd) == -1)
-		(write(1, "ERROR:pipe probleme", 20), exit(1));
+		(write(1, "ERROR:pipe probleme", 20), exit(0));
 	cmd->id = fork();
 	if (cmd->id == -1)
-		(write(1, "ERROR:fork probleme", 20), exit(1));
+		(write(1, "ERROR:pipe probleme", 20), exit(0));
 	if (cmd->id == 0)
 	{
 		close(fd[0]);
-		if (cmd->inf >= 0)
-			dup2(cmd->inf, STDIN_FILENO);
-		if (cmd->outf < 0 && !i)
-			dup2(fd[1], STDOUT_FILENO);
-		else if (cmd->outf >= 0)
-			dup2(cmd->outf, STDOUT_FILENO);
-		else if (cmd->outf == -2 && i)
-			 dup2(o_out, STDOUT_FILENO);
-		close(o_out);
-		close(fd[1]);
-		path = ft_path(cmd->cmd[0], env);
-		if (!is_built(cmd->cmd[0]))
+		if (cmd->inf > -1)
 		{
-			if (execve(path, cmd->cmd, env) == -1)
-			(write(2, "command not found\n", 19), exit(127));
+			
+			dup2(cmd->inf, STDIN_FILENO);
+			close(cmd->inf);
+		}
+		if (cmd->outf > -1)
+		{
+			dup2(cmd->outf, STDOUT_FILENO);
+            close(cmd->outf);
+		}
+		else if (cmd->outf < 0 && !i)
+			dup2(fd[1], STDOUT_FILENO);
+		else if (cmd->outf < 0 && i)
+			dup2(o_out, STDOUT_FILENO);
+		close(fd[1]);
+		if (is_built(cmd->cmd[0]))
+		{
+			execute_builtins(cmd);
+			exit(0);
 		}
 		else
 		{
-			exit_s = execute_builtins(cmd);
-			exit(0);
+			path = ft_path(cmd->cmd[0], env);
+            if (!path)
+                (write(1, "ERROR:path probleme", 20), exit(1));
+            if (execve(path, cmd->cmd, env) == -1)
+            (write(1, "ERROR:path probleme", 20), exit(1));
 		}
 	}
 	else
 	{
-		close(fd[1]);
-		//close(STDIN_FILENO);
+		if (cmd->inf > -1)
+            close(cmd->inf);
+        if (cmd->outf > -1)
+            close(cmd->outf);
+        close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}

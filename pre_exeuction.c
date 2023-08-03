@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:13:02 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 07:06:41 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 12:04:04 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	pipex(t_lexer  *cmd, char **env, int i)
 		if (!cmd->next)
 			i = 1;
 		if (cmd->inf != -1 && cmd->outf != -1 && cmd->cmd && cmd->cmd[0])
-			children(cmd, env, i);
+			children(cmd, env, i, out_file);
 		cmd = cmd->next;
 	}
 	while(lst)

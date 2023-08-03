@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 07:52:53 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 08:53:30 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_file  *new_file(t_file  **file);
 void    deqou_cmd(char *str, int sqo, int dqo, int i);
 void	env_new(t_env **var, char *env);
 t_env	*full_env(char **env);
-void	ft_expand(char **str, t_env *env, int v, int i)
+void	ft_expand(char **str, t_env *env, int v, int i);
 int	    is_quote(char *str, int i);
 void	showerror(char *str);
 void	rem_quote(t_lexer *cmd);
@@ -79,18 +79,17 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env);
 void    free_2d(char **str);
 void	pipex(t_lexer  *cmd, char **env, int i);
 void	free_all(t_lexer *cmd);
-int	fd_pipe(void);
-char **env_split(char *env);
+char    **env_split(char *env);
 int    execute_builtins(t_lexer *cmd);
 int     ft_pwd(void);
 int     ft_strcmp(char *s1, char *s2);
 void	ft_echo(char **arg);
 void    ft_exit(char **cmd);
 int     ft_cd(char **arg, t_env **env);
-int ft_export(char **cmd, t_env **env);
-void pre_exe(t_lexer  *cmd, char **env);
-void	children(t_lexer *cmd, char **env,  int i);
-int is_built(char *str);
+int     ft_export(char **cmd, t_env **env);
+void    pre_exe(t_lexer  *cmd, char **env);
+void	children(t_lexer *cmd, char **env,  int i, int o_out);
+int     is_built(char *str);
 char    **extra_check(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 07:31:31 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 11:38:56 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	open_her(char *str, int v, t_env *var)
 				&& !ft_strncmp(lim, str, ft_strlen(lim))))
 			break ;
 		if (!v)
-			ft_expand(&lim, var, 1);
+			ft_expand(&lim, var, 1, 0);
 		write(fd[1], lim, ft_strlen(lim));
 		write(fd[1], "\n", 1);
 		free(lim);

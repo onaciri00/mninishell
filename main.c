@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 07:22:38 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/03 12:03:26 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ int	main(int ac, char *av[], char *env[])
 			free_all(cmd);
 		}
 		free(str);
-		system("leaks minishell");
+		//system("leaks minishell");
 	}
 }
