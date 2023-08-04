@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 11:38:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/04 09:38:40 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,10 @@ void	set_files(t_lexer *cmd, t_file *new, int fd)
 	}
 }
 
-void	open_file(t_lexer *cmd, t_file *file, t_env *env)
+void	open_file(t_lexer *cmd, t_file *new, t_env *env)
 {
-	t_file	*new;
 	int		fd;
 
-	new = file;
 	fd = -2;
 	while (new)
 	{
@@ -68,12 +66,14 @@ void	open_file(t_lexer *cmd, t_file *file, t_env *env)
 				fd = open(new->file, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		}
 		else if (new->limeter)
-			fd = open_her(new->limeter, file->lim_con, env);
+			fd = open_her(new->limeter, new->lim_con, env);
 		if (fd == -1 && new->file)
 			printf(" %s: No such file or directory\n", new->file);
 		else if (fd == -1 && new->limeter)
 			printf("PROBLEM IN OPENING HERDOC\n");
 		set_files(cmd, new, fd);
+		if (fd == -1)
+			break ;
 		new = new->next;
 	}
 }

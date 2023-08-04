@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: onaciri <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:21:51 by onaciri           #+#    #+#             */
-/*   Updated: 2023/07/21 08:27:49 by onaciri          ###   ########.fr       */
+/*   Updated: 2022/10/24 16:08:46 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_substr(char const *str, unsigned int start, size_t len)
 		len = ft_strlen(str);
 	if (ft_strlen(str) - start <= len)
 		len = ft_strlen(&str[start]);
-	if (str[0] == '\0' || start >= ft_strlen(str) || !len)
+	if (str[0] == '\0' || start >= ft_strlen(str))
 		return (ft_strdup(""));
 	subs = malloc((len + 1) * sizeof(char));
 	if (!subs)
