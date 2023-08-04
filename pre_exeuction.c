@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:13:02 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 12:04:04 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/04 12:13:13 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,26 @@ int is_built(char *str)
 	return (0);
 }
 
+void	ft_wait(t_lexer *lst)
+{
+	int	status;
+
+	while(lst)
+	{ 
+		if (lst->inf != -1 && lst->outf != -1)
+			waitpid(lst->id, &status, 0);
+		lst = lst->next;
+	}
+	if (WIFEXITED(status))
+		exit_s = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		exit_s = WTERMSIG(status);
+}
+
 void	pipex(t_lexer  *cmd, char **env, int i)
 {
 	t_lexer	*lst;
 	int file;
-	int status;
 	int out_file;
 
 	file = dup(STDIN_FILENO);
@@ -49,16 +64,7 @@ void	pipex(t_lexer  *cmd, char **env, int i)
 			children(cmd, env, i, out_file);
 		cmd = cmd->next;
 	}
-	while(lst)
-	{ 
-		if (lst->inf != -1 && lst->outf != -1)
-			waitpid(lst->id, &status, 0);
-		lst = lst->next;
-	}
-	if (WIFEXITED(status))
-		exit_s = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		exit_s = WTERMSIG(status);
+	ft_wait(lst);
 	dup2(file, STDIN_FILENO);
 	dup2(out_file, STDOUT_FILENO);
 }

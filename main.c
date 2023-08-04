@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 11:44:20 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 08:52:06 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/04 11:48:09 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int ac, char *av[], char *env[])
 		{
 			add_history(str);
 			cmd = ft_start(&str, var, 0);
+			cmd->env = var;
 			pipex(cmd, env, 0);
 			free_all(cmd);
 		}

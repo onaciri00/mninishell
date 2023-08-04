@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/03 12:04:23 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/04 16:20:29 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,19 @@ void	rm_slash(char *str)
 	str[i] = '\0';
 }
 
-char	*ft_path(char *path_cmd, char **env)
+char	**in_path(t_env *env)
+{
+	char	**path;
+
+	while (env && !ft_strnstr(env->key, "PATH", ft_strlen("PATH")))
+		env = env->next;
+	if (!env)
+		return (NULL);
+	path = ft_split(env->value, ':');
+	return (path);
+}
+
+char	*ft_path(char *path_cmd, t_env *env)
 {
 	char	**path;
 	char	*cmd1;
@@ -88,12 +100,10 @@ char	*ft_path(char *path_cmd, char **env)
 		return (NULL);
 	if (path_cmd[0] == '\\')
 		rm_slash(path_cmd);
-	while (env[i] && !ft_strnstr(env[i], "PATH=", ft_strlen("PATH=")))
-		i++;
-	if (!env[i])
-		showerror("the path is gone");
-	path = ft_split(env[i], ':');
 	i = -1;
+	path = in_path(env);
+	if (!path)
+		return (NULL);
 	sub_path = ft_strjoinp(path[0], "/");
 	cmd1 = ft_strjoinp(sub_path, path_cmd);
 	while ((access(cmd1, X_OK) == -1) && path[++i] != NULL)
@@ -112,10 +122,10 @@ void	children(t_lexer *cmd, char **env,  int i, int o_out)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		(write(1, "ERROR:pipe probleme", 20), exit(0));
+		(write(1, "ERROR:pipe probleme", 20), exit(127));
 	cmd->id = fork();
 	if (cmd->id == -1)
-		(write(1, "ERROR:pipe probleme", 20), exit(0));
+		(write(1, "ERROR:pipe probleme", 20), exit(127));
 	if (cmd->id == 0)
 	{
 		close(fd[0]);
@@ -142,7 +152,7 @@ void	children(t_lexer *cmd, char **env,  int i, int o_out)
 		}
 		else
 		{
-			path = ft_path(cmd->cmd[0], env);
+			path = ft_path(cmd->cmd[0], cmd->env);
             if (!path)
                 (write(1, "ERROR:path probleme", 20), exit(1));
             if (execve(path, cmd->cmd, env) == -1)
