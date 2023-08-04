@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 06:19:08 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 09:33:56 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/04 09:55:55 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_pipe(char *str)
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '|' )
+		if (str[i] == '|' && is_quote(str, i))
 		{
 			i++;
 			if ((str[i] == '|' && str[i + 1] == '|' ) || !str[i + 1])
@@ -66,7 +66,7 @@ int	ft_red(char *str)
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '>')
+		if (str[i] == '>' && !is_quote(str, i))
 		{
 			if (str[i + 1] == '>')
 				i++;
