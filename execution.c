@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/05 10:31:31 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 15:04:52 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,30 @@ void	before_exe(t_lexer *cmd, int fd[2], int o_out, int i)
 	close(fd[1]);
 }
 
-void	children(t_lexer *cmd, char **env,  int i, int o_out)
+void	sons(t_lexer *cmd, char **env)
 {
 	char	*path;
+	
+	if (is_built(cmd->cmd[0]))
+	{
+		execute_builtins(cmd);
+		exit(0);
+	}
+	else
+	{
+		path = ft_path(cmd->cmd[0], cmd->env);
+		if (execve(path, cmd->cmd, env) == -1)
+		{
+			if (path)
+				free(path);
+			perror("minishell: ");
+			exit(127);
+		}
+	}
+}
+
+void	children(t_lexer *cmd, char **env,  int i, int o_out)
+{
 	int		fd[2];
 
 	if (pipe(fd) == -1)
@@ -56,17 +77,7 @@ void	children(t_lexer *cmd, char **env,  int i, int o_out)
 	if (cmd->id == 0)
 	{
 		before_exe(cmd, fd, o_out, i);
-		if (is_built(cmd->cmd[0]))
-		{
-			execute_builtins(cmd);
-			exit(0);
-		}
-		else
-		{
-			path = ft_path(cmd->cmd[0], cmd->env);
-            if (execve(path, cmd->cmd, env) == -1)
-				(perror("minishell: "), exit(127));
-		}
+		sons(cmd, env);
 	}
 	else
 		father(cmd, fd);

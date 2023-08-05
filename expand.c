@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 08:44:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:34:13 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 15:16:44 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,21 +119,24 @@ void	ft_expand(char **str, t_env *env, int v, int i)
 	{
 		if ((*str)[i] == '$' && (ft_isalnum((*str)[i + 1]) || (*str)[i +1] == 95
 			|| (*str)[i + 1] == '"' || (*str)[i + 1] == '\''
-			|| (*str)[i + 1] == '@'))
+			|| (*str)[i + 1] == '@' || (*str)[i + 1] == '?'))
 		{
 			if (is_quote(*str, i) != 1 && do_expand(*str, i)
 				&& !(is_quote(*str, i) == 2
 					&& ((*str)[i + 1] == '"'
 					|| (*str)[i + 1] == '\'' )) && v == 2)
-				i = ft_strmerge(str, i, i + 1, env);
+				{
+					if ((*str)[i + 1] == '?' && v)
+					{
+						i += find_quest(str, i, sing);
+						sing++;
+					}
+					else
+						i = ft_strmerge(str, i, i + 1, env);
+				}
 		}
 		else if ((*str)[i] == '$' && v == 1 && ft_isalnum((*str)[i + 1]))
 			i = ft_strmerge(str, i, i + 1, env);
-		else if ((*str)[i] == '$' && (*str)[i + 1] == '?' && v)
-		{
-			i += find_quest(str, i, sing);
-			sing++;
-		}
 		if ((*str)[i])
 			i++;
 	}
