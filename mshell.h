@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:50:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:33:41 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 09:19:28 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 int exit_s;
 
@@ -57,6 +58,7 @@ typedef struct s_lexer
 	t_env			*env;
     int             inf;
     int             outf;
+    int             size;
     struct s_lexer  *next;
     
 }	t_lexer;
@@ -75,7 +77,7 @@ void	ft_expand(char **str, t_env *env, int v, int i);
 int	    is_quote(char *str, int i);
 void	showerror(char *str);
 void	rem_quote(t_lexer *cmd);
-void	open_file(t_lexer *cmd, t_file *file, t_env *env);
+void	open_file(t_lexer *cmd, t_file *file, t_env *env, int fd);
 void    free_2d(char **str);
 void	pipex(t_lexer  *cmd, char **env, int i);
 void	free_all(t_lexer *cmd);

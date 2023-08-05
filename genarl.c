@@ -6,17 +6,11 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 08:24:09 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:34:02 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 06:11:22 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
-
-void	showerror(char *str)
-{
-	perror(str);
-	exit(1);
-}
 
 int	file_size(t_file *file)
 {
@@ -83,15 +77,17 @@ t_lexer	*creat_cmd(int size)
 		return (NULL);
 	cmd = malloc(sizeof(t_lexer));
 	cmd->file = NULL;
-	lst = cmd;
 	cmd->inf = -2;
 	cmd->outf = -2;
+	cmd->size = 0;
+	lst = cmd;
 	while (--size)
 	{
 		cmd->next = malloc(sizeof(t_lexer));
 		cmd->next->file = NULL;
 		cmd->next->inf = -2;
 		cmd->next->outf = -2;
+		cmd->next->size = 0;
 		cmd = cmd->next;
 	}
 	cmd->next = NULL;

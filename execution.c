@@ -6,32 +6,11 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 06:44:19 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:34:16 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 09:03:29 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mshell.h"
-
-void	ft_free(char **dev, char **path)
-{
-	int	i;
-
-	i = 0;
-	while (path[i])
-	{
-		free(path[i]);
-		i++;
-	}
-	free(path);
-	i = 0;
-	while (dev[i])
-	{
-		free(dev[i]);
-		i++;
-	}
-	free(dev);
-}
-
 
 char	*ft_strjoinp(char const *s1, char const *s2)
 {
@@ -76,7 +55,7 @@ char	**in_path(t_env *env)
 {
 	char	**path;
 
-	while (env && !ft_strnstr(env->key, "PATH", ft_strlen("PATH")))
+	while (env && ft_strcmp(env->key, "PATH"))
 		env = env->next;
 	if (!env)
 		return (NULL);
@@ -119,13 +98,14 @@ char	*ft_path(char *path_cmd, t_env *env)
 void	children(t_lexer *cmd, char **env,  int i, int o_out)
 {
 	char	*path;
+	//int		exit_b;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		(write(1, "ERROR:pipe probleme", 20), exit(127));
+		(perror("minishell: "), exit(127));
 	cmd->id = fork();
 	if (cmd->id == -1)
-		(write(1, "ERROR:pipe probleme", 20), exit(127));
+		(perror("minishell: "), exit(127));
 	if (cmd->id == 0)
 	{
 		close(fd[0]);
@@ -153,10 +133,8 @@ void	children(t_lexer *cmd, char **env,  int i, int o_out)
 		else
 		{
 			path = ft_path(cmd->cmd[0], cmd->env);
-            if (!path)
-                (write(1, "ERROR:path probleme", 20), exit(1));
             if (execve(path, cmd->cmd, env) == -1)
-            (write(1, "ERROR:path probleme", 20), exit(1));
+            (perror("minishell: "), exit(127));
 		}
 	}
 	else

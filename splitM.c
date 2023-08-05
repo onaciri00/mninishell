@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 14:04:13 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:33:37 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 09:02:10 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,9 @@ t_lexer	*ft_start(char **str, t_env *var, int i)
 	{	
 		check_arg(raw[i], cmd, 0, 0);
 		rem_quote(cmd);
-		open_file(cmd, cmd->file, var);
+		open_file(cmd, cmd->file, var, -2);
+		cmd->size = size;
+		cmd->env = var;
 		cmd = cmd->next;
 		i++;
 	}
