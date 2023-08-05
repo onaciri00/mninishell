@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 16:20:35 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/05 06:23:34 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 10:47:26 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	open_file(t_lexer *cmd, t_file *new, t_env *env, int fd)
 		if (fd == -1)
 		{	
 			exit_s = 1;
+			printf("file           %d\n", exit_s);
 			break ;
 		}
 		new = new->next;

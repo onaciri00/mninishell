@@ -6,7 +6,7 @@
 /*   By: onaciri <onaciri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 12:13:02 by onaciri           #+#    #+#             */
-/*   Updated: 2023/08/04 16:33:25 by onaciri          ###   ########.fr       */
+/*   Updated: 2023/08/05 10:52:19 by onaciri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	ft_wait(t_lexer *lst)
 	{ 
 		if (lst->inf != -1 && lst->outf != -1)
 			waitpid(lst->id, &status, 0);
+		if (lst->inf != -1 && lst->outf != -1 && WIFEXITED(status))
+			exit_s = WEXITSTATUS(status);
+		else if (lst->inf != -1 && lst->outf != -1 &&WIFSIGNALED(status))
+			exit_s = WTERMSIG(status);
 		lst = lst->next;
 	}
-	if (WIFEXITED(status))
-		exit_s = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		exit_s = WTERMSIG(status);
 }
 
 void	pipex(t_lexer  *cmd, char **env, int i)
